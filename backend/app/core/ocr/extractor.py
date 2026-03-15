@@ -10,6 +10,19 @@ from PIL import Image
 
 from app.core.ocr.gemini_client import GeminiVisionClient
 
+# Configure Tesseract path for Windows
+_tesseract_paths = [
+    os.getenv("TESSERACT_CMD", ""),
+    r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+    os.path.expandvars(r"%LOCALAPPDATA%\Programs\Tesseract-OCR\tesseract.exe"),
+    os.path.join(os.path.expanduser("~"), "AppData", "Local", "Programs", "Tesseract-OCR", "tesseract.exe"),
+]
+for _path in _tesseract_paths:
+    if _path and os.path.isfile(_path):
+        pytesseract.pytesseract.tesseract_cmd = _path
+        print(f"[Tesseract] Found at: {_path}")
+        break
+
 CONFIDENCE_THRESHOLD = float(os.getenv("OCR_CONFIDENCE_THRESHOLD", "0.75"))
 
 

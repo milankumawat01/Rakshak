@@ -8,7 +8,7 @@ import google.generativeai as genai
 
 
 class GeminiVisionClient:
-    MODEL = "gemini-1.5-flash"  # cheapest, fast enough for demo
+    MODEL = "gemini-2.0-flash"  # cheapest, fast enough for demo
 
     PROMPT = """
     You are reading a Jharkhand (India) land document called a Khatiyan.
