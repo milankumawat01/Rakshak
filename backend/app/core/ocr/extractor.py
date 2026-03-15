@@ -72,9 +72,13 @@ def _tesseract_extract(image_path: str) -> dict:
     """Run Tesseract OCR and attempt basic field extraction from raw text."""
     try:
         img = Image.open(image_path)
-        # Use Hindi + English, assume uniform block of text
-        raw_text = pytesseract.image_to_string(img, lang="hin+eng", config="--psm 6")
-        data = pytesseract.image_to_data(img, lang="hin+eng", config="--psm 6", output_type=pytesseract.Output.DICT)
+        # Try Hindi + English first, fall back to English only if hin not available
+        try:
+            raw_text = pytesseract.image_to_string(img, lang="hin+eng", config="--psm 6")
+            data = pytesseract.image_to_data(img, lang="hin+eng", config="--psm 6", output_type=pytesseract.Output.DICT)
+        except pytesseract.TesseractError:
+            raw_text = pytesseract.image_to_string(img, lang="eng", config="--psm 6")
+            data = pytesseract.image_to_data(img, lang="eng", config="--psm 6", output_type=pytesseract.Output.DICT)
 
         # Calculate average confidence from Tesseract word confidences
         confidences = [int(c) for c in data["conf"] if int(c) > 0]
