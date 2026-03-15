@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+rakshak.db
+**/uploads/*
+!**/uploads/.gitkeep
+.env
+*.egg-info/
+dist/
+build/
+node_modules/
+frontend/dist/
+.DS_Store
