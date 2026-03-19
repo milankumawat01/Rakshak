@@ -7,6 +7,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import { useT } from "../lib/i18n";
 
 function scoreColor(score) {
   if (score >= 80) return "#10B981";
@@ -23,9 +24,11 @@ const LABELS = {
   mutation_history_score: "Mutation History",
   khatiyan_age_score: "Khatiyan Age",
   chain_of_title_score: "Chain of Title",
+  poa_abuse_score: "PoA Abuse Check",
 };
 
 export default function RiskBreakdownChart({ assessment }) {
+  const { t } = useT();
   if (!assessment) return null;
 
   const data = Object.entries(LABELS).map(([key, label]) => ({
@@ -34,14 +37,14 @@ export default function RiskBreakdownChart({ assessment }) {
   }));
 
   return (
-    <div className="bg-bg-card rounded-2xl p-6">
-      <h3 className="text-lg font-semibold mb-4">Risk Breakdown</h3>
-      <ResponsiveContainer width="100%" height={280}>
-        <BarChart data={data} layout="vertical" margin={{ left: 20 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-          <XAxis type="number" domain={[0, 100]} stroke="#94A3B8" fontSize={12} />
-          <YAxis type="category" dataKey="name" stroke="#94A3B8" fontSize={12} width={120} />
-          <Bar dataKey="score" radius={[0, 4, 4, 0]} barSize={18}>
+    <div className="bg-bg-card rounded-2xl p-6 border border-border">
+      <h3 className="text-lg font-semibold mb-4">{t("verify.risk_breakdown")}</h3>
+      <ResponsiveContainer width="100%" height={360}>
+        <BarChart data={data} layout="vertical" margin={{ left: 10, right: 20, top: 10, bottom: 10 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#E5E0DB" />
+          <XAxis type="number" domain={[0, 100]} stroke="#999999" fontSize={12} />
+          <YAxis type="category" dataKey="name" stroke="#999999" fontSize={13} width={150} tickLine={false} />
+          <Bar dataKey="score" radius={[0, 6, 6, 0]} barSize={22}>
             {data.map((entry, i) => (
               <Cell key={i} fill={scoreColor(entry.score)} />
             ))}

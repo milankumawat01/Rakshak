@@ -37,6 +37,7 @@ export const uploadSubmission = (formData) =>
     headers: { "Content-Type": "multipart/form-data" },
   });
 export const getSubmission = (id) => api.get(`/submissions/${id}`);
+export const updateExtraction = (id, data) => api.patch(`/submissions/${id}/extraction`, data);
 export const listSubmissions = () => api.get("/submissions/");
 
 // --- Vault ---

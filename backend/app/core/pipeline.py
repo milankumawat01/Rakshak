@@ -48,15 +48,27 @@ def run_pipeline(submission_id: str, db: Session) -> None:
             area_confidence=extraction.area_confidence,
             owner_name_extracted=extraction.owner_name,
             owner_confidence=extraction.owner_confidence,
+            surname_extracted=extraction.surname,
+            surname_confidence=extraction.surname_confidence,
             tribal_status_extracted=extraction.tribal_status,
             tribal_confidence=extraction.tribal_confidence,
             last_mutation_date_extracted=extraction.last_mutation_date,
             mutation_confidence=extraction.mutation_confidence,
+            first_registration_date_extracted=extraction.first_registration_date,
+            first_reg_confidence=extraction.first_reg_confidence,
+            land_use_type_extracted=extraction.land_use_type,
+            land_use_confidence=extraction.land_use_confidence,
+            mutation_type_extracted=extraction.mutation_type,
+            mutation_type_confidence=extraction.mutation_type_confidence,
             village_name_extracted=extraction.village_name,
             extraction_language=extraction.extraction_language,
             overall_extraction_confidence=extraction.overall_confidence,
             requires_manual_review=extraction.requires_manual_review,
             raw_text=extraction.raw_text,
+            vanshavali_extracted=extraction.vanshavali,
+            co_heirs_extracted=extraction.co_heirs,
+            dc_permission_ref_extracted=extraction.dc_permission_ref,
+            poa_count_extracted=extraction.poa_count,
         )
         db.add(db_extraction)
         db.commit()
@@ -70,6 +82,7 @@ def run_pipeline(submission_id: str, db: Session) -> None:
             buyer_tribal=submission.buyer_tribal,
             village_name=submission.village_name,
             plot_number=submission.plot_number,
+            seller_name=submission.seller_name,
         )
 
         # Store assessment in DB
@@ -83,11 +96,14 @@ def run_pipeline(submission_id: str, db: Session) -> None:
             mutation_history_score=risk_result["mutation_history_score"],
             khatiyan_age_score=risk_result["khatiyan_age_score"],
             chain_of_title_score=risk_result["chain_of_title_score"],
+            poa_abuse_score=risk_result["poa_abuse_score"],
             final_risk_score=risk_result["final_risk_score"],
             risk_level=risk_result["risk_level"],
             recommendation=risk_result["recommendation"],
             flags=risk_result["flags"],
             checklist=risk_result["checklist"],
+            discrepancies=risk_result["discrepancies"],
+            cnt_compliance=risk_result["cnt_compliance"],
         )
         db.add(db_assessment)
 

@@ -1,12 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-base: #0F172A;
-  --color-bg-card: #1E293B;
-  --color-accent: #6366F1;
-  --color-accent-hover: #818CF8;
-  --color-text-primary: #F1F5F9;
-  --color-text-muted: #94A3B8;
+  --color-bg-base: #FAF9F7;
+  --color-bg-card: #FFFFFF;
+  --color-bg-input: #F5F3F0;
+  --color-border: #E5E0DB;
+  --color-border-hover: #D4CFC9;
+  --color-accent: #D97706;
+  --color-accent-hover: #B45309;
+  --color-text-primary: #1A1A1A;
+  --color-text-muted: #666666;
   --color-risk-green: #10B981;
   --color-risk-yellow: #F59E0B;
   --color-risk-orange: #F97316;
@@ -15,9 +18,21 @@
   --font-mono: "DM Mono", monospace;
 }
 
+html {
+  font-size: 16px;
+}
+
 body {
   background-color: var(--color-bg-base);
   color: var(--color-text-primary);
+}
+
+button {
+  touch-action: manipulation;
+}
+
+::selection {
+  background-color: #D9770633;
 }
 
 /* Scrollbar styling */
@@ -28,6 +43,37 @@ body {
   background: var(--color-bg-base);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-bg-card);
+  background: var(--color-border);
   border-radius: 3px;
+}
+
+/* Print styles for PDF download */
+@media print {
+  body {
+    background: white !important;
+    color: #1e293b !important;
+  }
+
+  /* Hide everything */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* Show only the print container and its children */
+  #print-container,
+  #print-container * {
+    visibility: visible !important;
+  }
+
+  #print-container {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
 }

@@ -1,0 +1,38 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Backend",
+      "type": "shell",
+      "command": "cd backend; ./venv/Scripts/python.exe -m uvicorn main:app --reload --port 8000",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "dev"
+      }
+    },
+    {
+      "label": "Frontend",
+      "type": "shell",
+      "command": "cd frontend; npm run dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "dev"
+      }
+    },
+    {
+      "label": "Start Dev",
+      "dependsOn": ["Backend", "Frontend"],
+      "dependsOrder": "parallel",
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "default"
+      }
+    }
+  ]
+}

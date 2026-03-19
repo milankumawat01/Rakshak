@@ -17,6 +17,7 @@ class RiskAssessment(Base):
     mutation_history_score = Column(Integer, nullable=True)
     khatiyan_age_score = Column(Integer, nullable=True)
     chain_of_title_score = Column(Integer, nullable=True)
+    poa_abuse_score = Column(Integer, nullable=True)
     final_risk_score = Column(Integer, nullable=True)
     risk_level = Column(
         SAEnum("GREEN", "YELLOW", "ORANGE", "RED", name="risk_level_assessment_enum"),
@@ -28,4 +29,6 @@ class RiskAssessment(Base):
     )
     flags = Column(JSON, nullable=True)
     checklist = Column(JSON, nullable=True)
+    discrepancies = Column(JSON, nullable=True)
+    cnt_compliance = Column(JSON, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)

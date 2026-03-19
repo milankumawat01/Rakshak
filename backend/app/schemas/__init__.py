@@ -38,14 +38,26 @@ class ExtractionOut(BaseModel):
     area_confidence: float = 0.0
     owner_name: Optional[str] = None
     owner_confidence: float = 0.0
+    surname: Optional[str] = None
+    surname_confidence: float = 0.0
     tribal_status: Optional[str] = None
     tribal_confidence: float = 0.0
     last_mutation_date: Optional[str] = None
     mutation_confidence: float = 0.0
+    first_registration_date: Optional[str] = None
+    first_reg_confidence: float = 0.0
+    land_use_type: Optional[str] = None
+    land_use_confidence: float = 0.0
+    mutation_type: Optional[str] = None
+    mutation_type_confidence: float = 0.0
     village_name: Optional[str] = None
     extraction_language: str = "mixed"
     overall_confidence: float = 0.0
     requires_manual_review: bool = True
+    vanshavali: Optional[list] = None
+    co_heirs: Optional[list] = None
+    dc_permission_ref: Optional[str] = None
+    poa_count: int = 0
 
 
 class AssessmentOut(BaseModel):
@@ -56,11 +68,14 @@ class AssessmentOut(BaseModel):
     mutation_history_score: Optional[int] = None
     khatiyan_age_score: Optional[int] = None
     chain_of_title_score: Optional[int] = None
+    poa_abuse_score: Optional[int] = None
     final_risk_score: Optional[int] = None
     risk_level: Optional[str] = None
     recommendation: Optional[str] = None
     flags: Optional[list] = None
     checklist: Optional[dict] = None
+    discrepancies: Optional[list] = None
+    cnt_compliance: Optional[dict] = None
 
 
 class SubmissionDetailOut(BaseModel):
@@ -89,6 +104,22 @@ class SubmissionListItem(BaseModel):
     risk_level: Optional[str] = None
     risk_score: Optional[int] = None
     created_at: Optional[datetime] = None
+
+
+# --- OCR Correction ---
+
+class OCRCorrectionRequest(BaseModel):
+    plot_number: Optional[str] = None
+    khata_number: Optional[str] = None
+    area_bigha: Optional[float] = None
+    owner_name: Optional[str] = None
+    surname: Optional[str] = None
+    tribal_status: Optional[str] = None
+    last_mutation_date: Optional[str] = None
+    land_use_type: Optional[str] = None
+    mutation_type: Optional[str] = None
+    village_name: Optional[str] = None
+    dc_permission_ref: Optional[str] = None
 
 
 # --- Vault ---
