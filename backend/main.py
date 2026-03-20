@@ -22,7 +22,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=["http://localhost:5173", "http://localhost:3000", "http://64.227.182.255"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -47,3 +47,20 @@ def health_check():
         "status": "ok" if db_connected else "error",
         "db": "connected" if db_connected else "disconnected",
     }
+
+
+# Serve frontend static files (production build)
+frontend_dist = Path(__file__).resolve().parent.parent / "frontend" / "dist"
+if frontend_dist.exists():
+    from fastapi.responses import FileResponse
+
+    # Serve static assets (js, css, images)
+    app.mount("/assets", StaticFiles(directory=frontend_dist / "assets"), name="frontend-assets")
+
+    # Catch-all: serve index.html for SPA routing
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        file_path = frontend_dist / full_path
+        if file_path.is_file():
+            return FileResponse(file_path)
+        return FileResponse(frontend_dist / "index.html")
