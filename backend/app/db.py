@@ -1,11 +1,17 @@
 import os
+from pathlib import Path
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, declarative_base
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./rakshak.db")
+# Resolve DB path relative to backend/ dir so it works regardless of cwd
+_backend_dir = Path(__file__).resolve().parent.parent
+_default_db = f"sqlite:///{_backend_dir / 'rakshak.db'}"
+DATABASE_URL = os.getenv("DATABASE_URL", _default_db)
+if DATABASE_URL == "sqlite:///./rakshak.db":
+    DATABASE_URL = _default_db
 
 connect_args = {}
 if DATABASE_URL.startswith("sqlite"):
