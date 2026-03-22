@@ -5,24 +5,28 @@ import { getSubmission } from "../lib/api";
 import { useT } from "../lib/i18n";
 
 const STEPS = [
-  { key: "ocr_extraction", labelKey: "processing.ocr_extraction", fakeMs: 2500 },
-  { key: "risk_scoring", labelKey: "processing.cnt_status", fakeMs: 2000 },
-  { key: "forest_check", labelKey: "processing.forest_boundary", fakeMs: 1800 },
-  { key: "mutation_check", labelKey: "processing.mutation_history", fakeMs: 1500 },
+  { key: "ocr_extraction", labelKey: "processing.ocr_extraction" },
+  { key: "risk_scoring", labelKey: "processing.cnt_status" },
+  { key: "forest_check", labelKey: "processing.forest_boundary" },
+  { key: "mutation_check", labelKey: "processing.mutation_history" },
 ];
 
-function getRealProgress(pipelineStep) {
-  const map = { queued: 0, ocr_extraction: 1, risk_scoring: 2, completed: 4 };
-  return map[pipelineStep] ?? 0;
+// Map backend pipeline_step to how many frontend steps are truly done
+function getBackendStepIndex(pipelineStep) {
+  if (!pipelineStep || pipelineStep === "queued") return -1;
+  if (pipelineStep === "ocr_extraction") return 0; // step 0 in progress
+  if (pipelineStep === "risk_scoring") return 1;    // step 1 in progress
+  if (pipelineStep === "completed") return STEPS.length;
+  return -1;
 }
 
 export default function ProcessingScreen({ submissionId, onComplete }) {
   const { t } = useT();
-  const [fakeProgress, setFakeProgress] = useState(Array(STEPS.length).fill(0));
-  const [activeStep, setActiveStep] = useState(0);
+  const [stepProgress, setStepProgress] = useState(Array(STEPS.length).fill(0));
   const [done, setDone] = useState(false);
   const completedDataRef = useRef(null);
-  const timerRef = useRef(null);
+  const tickRef = useRef(null);
+  const backendStepRef = useRef(-1);
 
   const { data } = useQuery({
     queryKey: ["submission", submissionId],
@@ -31,71 +35,74 @@ export default function ProcessingScreen({ submissionId, onComplete }) {
     enabled: !!submissionId && !done,
   });
 
-  // Track when backend is actually done
+  // Track backend completion
   useEffect(() => {
-    if (data?.submission_status === "completed" || data?.submission_status === "failed") {
+    if (!data) return;
+    const status = data.submission_status;
+    const step = data.pipeline_step;
+
+    backendStepRef.current = getBackendStepIndex(step);
+
+    if (status === "completed" || status === "failed") {
       completedDataRef.current = data;
     }
-  }, [data?.submission_status]);
+  }, [data]);
 
-  // Smooth fake progress animation per step
+  // Single animation loop — ticks every 80ms
   useEffect(() => {
     if (done) return;
 
-    const step = STEPS[activeStep];
-    if (!step) return;
-
-    const interval = 50;
-    const totalTicks = step.fakeMs / interval;
-    let tick = 0;
-
-    timerRef.current = setInterval(() => {
-      tick++;
-      const progress = Math.min(100, Math.round((tick / totalTicks) * 100));
-
-      setFakeProgress((prev) => {
+    tickRef.current = setInterval(() => {
+      setStepProgress((prev) => {
         const next = [...prev];
-        next[activeStep] = progress;
+        const backendAt = backendStepRef.current;
+        const backendDone = !!completedDataRef.current;
+
+        for (let i = 0; i < STEPS.length; i++) {
+          if (next[i] >= 100) continue; // already done
+
+          if (backendDone) {
+            // Backend finished — rush all remaining steps to 100
+            next[i] = Math.min(100, next[i] + 8);
+          } else if (i < backendAt) {
+            // Backend has passed this step — fill quickly
+            next[i] = Math.min(100, next[i] + 12);
+          } else if (i === backendAt) {
+            // Backend is currently on this step — animate steadily but cap at 85%
+            next[i] = Math.min(85, next[i] + 2);
+          } else if (i === backendAt + 1 && next[backendAt] >= 85) {
+            // Next step can start creeping once current is at cap
+            next[i] = Math.min(30, next[i] + 1);
+          }
+          // Steps further ahead stay at 0
+        }
+
+        // Check if all steps hit 100 and backend is done
+        const allDone = next.every((p) => p >= 100) && backendDone;
+        if (allDone) {
+          clearInterval(tickRef.current);
+          setDone(true);
+          setTimeout(() => {
+            onComplete?.(completedDataRef.current);
+          }, 600);
+        }
+
         return next;
       });
+    }, 80);
 
-      if (progress >= 100) {
-        clearInterval(timerRef.current);
+    return () => clearInterval(tickRef.current);
+  }, [done]);
 
-        // If this is the last step AND backend is done, finish
-        if (activeStep >= STEPS.length - 1) {
-          // If backend already responded, auto-transition after a brief pause
-          if (completedDataRef.current) {
-            setDone(true);
-            setTimeout(() => {
-              onComplete?.(completedDataRef.current);
-            }, 600);
-          } else {
-            // Backend still working — wait for it, then transition
-            const waitForBackend = setInterval(() => {
-              if (completedDataRef.current) {
-                clearInterval(waitForBackend);
-                setDone(true);
-                setTimeout(() => {
-                  onComplete?.(completedDataRef.current);
-                }, 600);
-              }
-            }, 300);
-          }
-        } else {
-          // Move to next step after small delay
-          setTimeout(() => setActiveStep((prev) => prev + 1), 300);
-        }
-      }
-    }, interval);
-
-    return () => clearInterval(timerRef.current);
-  }, [activeStep, done]);
-
-  // Overall progress for the spinner
   const overallProgress = Math.round(
-    fakeProgress.reduce((sum, p) => sum + p, 0) / STEPS.length
+    stepProgress.reduce((sum, p) => sum + p, 0) / STEPS.length
   );
+
+  // Are we waiting for the backend after animations hit their caps?
+  const waitingForBackend =
+    !done &&
+    !completedDataRef.current &&
+    stepProgress.some((p) => p >= 85);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[400px] gap-8">
@@ -122,16 +129,20 @@ export default function ProcessingScreen({ submissionId, onComplete }) {
 
       <div>
         <h2 className="text-2xl font-semibold text-center text-text-primary">{t("verify.analyzing")}</h2>
-        <p className="text-text-muted text-center mt-1">{t("verify.running_checks")}</p>
+        <p className="text-text-muted text-center mt-1">
+          {waitingForBackend
+            ? t("processing.ai_analyzing") || "AI is analyzing your document..."
+            : t("verify.running_checks")}
+        </p>
       </div>
 
       {/* Progressive step list */}
       <div className="w-full max-w-md space-y-4">
         {STEPS.map((s, i) => {
-          const pct = fakeProgress[i];
-          const isActive = i === activeStep && !done;
+          const pct = stepProgress[i];
           const isComplete = pct >= 100;
-          const isVisible = i <= activeStep;
+          const isActive = pct > 0 && pct < 100;
+          const isVisible = pct > 0 || i === 0; // always show step 0
 
           if (!isVisible) return null;
 
@@ -160,7 +171,7 @@ export default function ProcessingScreen({ submissionId, onComplete }) {
                 <span className={`text-xs font-mono ${
                   isComplete ? "text-risk-green" : "text-text-muted"
                 }`}>
-                  {isComplete ? "Done" : `${pct}%`}
+                  {isComplete ? "Done" : pct > 0 ? `${pct}%` : ""}
                 </span>
               </div>
               <div className="h-1.5 bg-bg-input rounded-full overflow-hidden ml-8">
@@ -177,7 +188,6 @@ export default function ProcessingScreen({ submissionId, onComplete }) {
         })}
       </div>
 
-      {/* Subtle fade-out message when done */}
       {done && (
         <p
           className="text-risk-green font-semibold transition-opacity duration-500"
