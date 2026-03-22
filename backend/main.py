@@ -15,7 +15,7 @@ from app.api.vault import router as vault_router
 from app.api.payment import router as payment_router
 
 app = FastAPI(
-    title="Rakshak API",
+    title="BhomiRakshak API",
     description="Land verification platform for Jharkhand",
     version="0.1.0",
 )

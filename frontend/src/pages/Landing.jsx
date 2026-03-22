@@ -79,7 +79,7 @@ export default function Landing() {
         <div className="flex items-center justify-between px-6 py-3.5 max-w-7xl mx-auto">
           <div className="flex items-center gap-2">
             <Shield className="w-7 h-7 text-accent" />
-            <span className="text-xl font-bold text-text-primary">Rakshak</span>
+            <span className="text-xl font-bold text-text-primary">BhomiRakshak</span>
           </div>
           <div className="flex items-center gap-2 md:gap-3">
             <button
@@ -87,6 +87,12 @@ export default function Landing() {
               className="px-3 py-1.5 text-sm font-medium border border-border rounded-lg hover:bg-bg-input transition-colors text-text-muted"
             >
               {locale === "en" ? "हिं" : "EN"}
+            </button>
+            <button
+              onClick={() => navigate("/about")}
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium border border-border rounded-lg hover:bg-bg-input transition-colors text-text-muted"
+            >
+              {t("about.nav_link")}
             </button>
             <a
               href="#"
@@ -211,7 +217,7 @@ export default function Landing() {
         <div className="max-w-6xl mx-auto w-full">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              Why Choose Rakshak?
+              Why Choose BhomiRakshak?
             </h2>
             <p className="text-text-muted text-lg max-w-xl mx-auto">
               Comprehensive land verification powered by AI and government data
@@ -279,12 +285,20 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5 text-accent" />
-            <span className="font-semibold text-text-primary">Rakshak</span>
+            <span className="font-semibold text-text-primary">BhomiRakshak</span>
             <span className="text-text-muted text-sm ml-2">AI-Powered Land Verification</span>
           </div>
-          <p className="text-sm text-text-muted">
-            For informational purposes only. Consult a legal professional before purchase decisions.
-          </p>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate("/about")}
+              className="text-sm text-text-muted hover:text-accent transition-colors"
+            >
+              {t("about.nav_link")}
+            </button>
+            <p className="text-sm text-text-muted">
+              For informational purposes only. Consult a legal professional before purchase decisions.
+            </p>
+          </div>
         </div>
       </footer>
 

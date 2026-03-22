@@ -28,7 +28,7 @@ export default function AppLayout({ children }) {
       <aside className="hidden md:flex flex-col w-64 bg-bg-card border-r border-border p-6">
         <div className="flex items-center gap-2 mb-10 cursor-pointer" onClick={() => navigate("/")}>
           <Shield className="w-7 h-7 text-accent" />
-          <span className="text-xl font-bold text-text-primary">Rakshak</span>
+          <span className="text-xl font-bold text-text-primary">BhomiRakshak</span>
         </div>
 
         <nav className="flex-1 space-y-1">
@@ -80,7 +80,7 @@ export default function AppLayout({ children }) {
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-bg-card border-b border-border px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Shield className="w-6 h-6 text-accent" />
-          <span className="text-lg font-bold text-text-primary">Rakshak</span>
+          <span className="text-lg font-bold text-text-primary">BhomiRakshak</span>
         </div>
         <div className="flex items-center gap-2">
           <button

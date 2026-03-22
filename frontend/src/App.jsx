@@ -7,6 +7,7 @@ import Verify from "./pages/Verify";
 import History from "./pages/History";
 import AddProperty from "./pages/AddProperty";
 import VaultDetail from "./pages/VaultDetail";
+import AboutUs from "./pages/AboutUs";
 
 function ProtectedRoute({ children }) {
   const { isLoggedIn } = useAuth();
@@ -17,6 +18,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
+      <Route path="/about" element={<AboutUs />} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/vault" element={<ProtectedRoute><Vault /></ProtectedRoute>} />
       <Route path="/vault/add" element={<ProtectedRoute><AddProperty /></ProtectedRoute>} />

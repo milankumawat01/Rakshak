@@ -615,7 +615,7 @@ export default function Verify() {
             <div className="bg-accent px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Shield className="w-5 h-5 text-white" />
-                <span className="text-white font-semibold">Rakshak</span>
+                <span className="text-white font-semibold">BhomiRakshak</span>
               </div>
               <span className="text-white/80 text-sm">Secure Payment</span>
             </div>
