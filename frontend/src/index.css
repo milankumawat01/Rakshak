@@ -14,8 +14,18 @@
   --color-risk-yellow: #F59E0B;
   --color-risk-orange: #F97316;
   --color-risk-red: #EF4444;
+  --color-gold: #D4A843;
+  --color-gold-hover: #C4982F;
+  --color-profit-green: #10B981;
+  --color-profit-red: #EF4444;
   --font-sans: "Inter", sans-serif;
   --font-mono: "DM Mono", monospace;
+
+  /* Shadow tokens */
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-card-hover: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
+  --shadow-gold: 0 4px 14px rgba(212,168,67,0.25);
+  --shadow-stat: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 html {
@@ -45,6 +55,36 @@ button {
 ::-webkit-scrollbar-thumb {
   background: var(--color-border);
   border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold);
+}
+
+/* Gradient utilities */
+.gradient-gold-subtle {
+  background: linear-gradient(135deg, rgba(212,168,67,0.06) 0%, rgba(212,168,67,0.02) 100%);
+}
+.gradient-profit-green {
+  background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, transparent 100%);
+}
+.gradient-profit-red {
+  background: linear-gradient(135deg, rgba(239,68,68,0.08) 0%, transparent 100%);
+}
+
+/* Recharts line draw animation */
+@keyframes chart-draw {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+.recharts-line-curve {
+  stroke-dasharray: 1000;
+  animation: chart-draw 1.5s ease-out forwards;
+}
+
+/* Focus ring utility */
+.focus-gold:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-bg-base), 0 0 0 4px rgba(212,168,67,0.4);
 }
 
 /* Print styles for PDF download */

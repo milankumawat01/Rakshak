@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
 import {
-  Upload, FileText, ArrowLeft, ArrowRight, Shield, AlertTriangle,
-  CheckCircle, XCircle, Database
+  Upload, ArrowLeft, ArrowRight, Shield, AlertTriangle,
+  CheckCircle, XCircle, Database,
 } from "lucide-react";
 import { uploadSubmission, createVaultItem, updateExtraction } from "../lib/api";
 import { useT } from "../lib/i18n";
@@ -15,6 +15,7 @@ import RiskBreakdownChart from "../components/RiskBreakdownChart";
 import ChecklistItem from "../components/ChecklistItem";
 import VanshavaliTree from "../components/VanshavaliTree";
 import LandHealthCertificate from "../components/LandHealthCertificate";
+import AppLayout from "../components/AppLayout";
 import { getRiskColor } from "../lib/riskColors";
 
 // Named step constants
@@ -27,7 +28,7 @@ const STEP_REPORT = 5;
 
 export default function Verify() {
   const navigate = useNavigate();
-  const { t, locale, setLocale } = useT();
+  const { t } = useT();
   const [step, setStep] = useState(STEP_UPLOAD);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -144,15 +145,9 @@ export default function Verify() {
   const riskColor = getRiskColor(assessment?.risk_level);
 
   return (
-    <div className="min-h-screen bg-bg-base">
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-bg-card">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-          <Shield className="w-6 h-6 text-accent" />
-          <span className="text-lg font-bold text-text-primary">Rakshak</span>
-        </div>
-        {/* Step indicator */}
-        <div className="hidden md:flex items-center gap-2">
+    <AppLayout>
+      {/* Step indicator */}
+      <div className="hidden lg:flex items-center gap-2 mb-8">
           {(Array.isArray(stepLabels) ? stepLabels : []).map((label, i) => (
             <div key={i} className="flex items-center gap-2">
               <div
@@ -173,15 +168,8 @@ export default function Verify() {
             </div>
           ))}
         </div>
-        <button
-          onClick={() => setLocale(locale === "en" ? "hi" : "en")}
-          className="px-3 py-1.5 text-sm font-medium border border-border rounded-lg hover:bg-bg-input transition-colors text-text-muted"
-        >
-          {locale === "en" ? "हिं" : "EN"}
-        </button>
-      </div>
 
-      <div className="w-full px-6 md:px-10 py-8">
+        <div>
         {/* Step 0: Upload + Details combined */}
         {step === STEP_UPLOAD && (
           <div>
@@ -619,8 +607,8 @@ export default function Verify() {
         )}
       </div>
 
-      {/* Mock Payment Modal */}
-      {showPayment && (
+        {/* Mock Payment Modal */}
+        {showPayment && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-bg-card rounded-2xl w-full max-w-md border border-border shadow-xl overflow-hidden">
             {/* Header */}
@@ -714,17 +702,17 @@ export default function Verify() {
             </div>
           </div>
         </div>
-      )}
+        )}
 
-      {/* Hidden print container for PDF download */}
-      <div id="print-container" style={{ display: "none" }}>
-        <LandHealthCertificate
-          ref={printRef}
-          extraction={extraction}
-          assessment={assessment}
-          submissionId={submissionId}
-        />
-      </div>
-    </div>
+        {/* Hidden print container for PDF download */}
+        <div id="print-container" style={{ display: "none" }}>
+          <LandHealthCertificate
+            ref={printRef}
+            extraction={extraction}
+            assessment={assessment}
+            submissionId={submissionId}
+          />
+        </div>
+    </AppLayout>
   );
 }

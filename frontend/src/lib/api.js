@@ -46,6 +46,15 @@ export const listVaultItems = () => api.get("/vault/");
 export const getVaultItem = (id) => api.get(`/vault/${id}`);
 export const updateVaultItem = (id, data) => api.patch(`/vault/${id}`, data);
 export const deleteVaultItem = (id) => api.delete(`/vault/${id}`);
+export const getVaultSummary = () => api.get("/vault/summary");
+export const getVaultValuation = (id) => api.get(`/vault/${id}/valuation`);
+export const uploadVaultDocument = (vaultId, formData) =>
+  api.post(`/vault/${vaultId}/documents`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+export const deleteVaultDocument = (vaultId, docId) =>
+  api.delete(`/vault/${vaultId}/documents/${docId}`);
+export const shareVaultItem = (id, data) => api.post(`/vault/${id}/share`, data);
 
 // --- Payment ---
 export const getPaymentConfig = () => api.get("/payment/config");
