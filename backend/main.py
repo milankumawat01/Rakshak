@@ -8,7 +8,19 @@ from dotenv import load_dotenv
 # Load .env from project root (one level up from backend/)
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
-from app.db import check_db_connection
+from app.db import Base, engine, check_db_connection
+
+# Import all models so Base.metadata knows about them
+from app.models.user import User  # noqa: F401
+from app.models.submission import Submission  # noqa: F401
+from app.models.payment import PaymentHistory  # noqa: F401
+from app.models.extraction import *  # noqa: F401,F403
+from app.models.assessment import *  # noqa: F401,F403
+from app.models.vault import *  # noqa: F401,F403
+
+# Create all tables (safe no-op if they already exist)
+Base.metadata.create_all(bind=engine)
+
 from app.api.auth import router as auth_router
 from app.api.submissions import router as submissions_router
 from app.api.vault import router as vault_router

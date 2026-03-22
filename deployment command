@@ -1,0 +1,5 @@
+cd /home/ubuntu/Rakshak
+git pull
+cd frontend && npm install --legacy-peer-deps && npm run build && cd ..
+cd backend && source venv/bin/activate && pip install -r requirements.txt && deactivate && cd ..
+pm2 restart rakshak
