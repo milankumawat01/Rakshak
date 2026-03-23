@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, TrendingUp, TrendingDown } from "lucide-react";
@@ -12,6 +13,7 @@ const formatINR = (val) => {
 };
 
 export default function VaultCard({ item, index = 0 }) {
+  const cardRef = useRef(null);
   const navigate = useNavigate();
   const { t } = useT();
   const riskColor = getRiskColor(item.risk_level);
@@ -34,6 +36,7 @@ export default function VaultCard({ item, index = 0 }) {
 
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4 }}
@@ -42,8 +45,8 @@ export default function VaultCard({ item, index = 0 }) {
       className="bg-bg-card rounded-2xl p-5 border border-border hover:border-gold cursor-pointer transition-shadow group gradient-gold-subtle"
       style={{ boxShadow: "var(--shadow-card)" }}
       whileTap={{ scale: 0.98 }}
-      onHoverStart={(e) => { e.currentTarget.style.boxShadow = "var(--shadow-card-hover)"; }}
-      onHoverEnd={(e) => { e.currentTarget.style.boxShadow = "var(--shadow-card)"; }}
+      onHoverStart={() => { cardRef.current && (cardRef.current.style.boxShadow = "var(--shadow-card-hover)"); }}
+      onHoverEnd={() => { cardRef.current && (cardRef.current.style.boxShadow = "var(--shadow-card)"); }}
     >
       {/* Header: name + risk badge */}
       <div className="flex items-start justify-between mb-3">

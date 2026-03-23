@@ -149,6 +149,15 @@ def create_vault_item(
     name = req.property_name or req.vault_name
 
     if req.submission_id:
+        # Return existing vault item if already created (e.g. by pipeline)
+        existing = db.query(UserVault).filter(
+            UserVault.submission_id == req.submission_id,
+            UserVault.user_id == user.user_id,
+        ).first()
+        if existing:
+            docs = db.query(VaultDocument).filter(VaultDocument.vault_id == existing.vault_id).all()
+            return _vault_to_out(existing, docs)
+
         # Create from existing submission
         submission = db.query(Submission).filter(
             Submission.submission_id == req.submission_id,

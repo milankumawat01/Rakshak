@@ -8,6 +8,7 @@ from app.core.risk.scorer import calculate_risk
 from app.models.submission import Submission
 from app.models.extraction import KhatiyanExtraction
 from app.models.assessment import RiskAssessment
+from app.models.vault import UserVault
 
 
 def run_pipeline(submission_id: str, db: Session) -> None:
@@ -113,6 +114,40 @@ def run_pipeline(submission_id: str, db: Session) -> None:
         submission.submission_status = "completed"
         submission.pipeline_step = "completed"
         db.commit()
+
+        # Step 4: Auto-create vault entry so History links work
+        existing_vault = db.query(UserVault).filter(
+            UserVault.submission_id == submission_id,
+            UserVault.user_id == submission.user_id,
+        ).first()
+        if not existing_vault:
+            # Prefer submission fields, fall back to OCR extraction
+            village = submission.village_name or extraction.village_name or "Property"
+            plot = submission.plot_number or extraction.plot_number or "—"
+            vault_name = f"{village} - Plot {plot}"
+            vault_item = UserVault(
+                vault_id=str(uuid.uuid4()),
+                user_id=submission.user_id,
+                submission_id=submission_id,
+                vault_name=vault_name,
+                property_name=vault_name,
+                plot_number=plot if plot != "—" else None,
+                village_name=village if village != "Property" else None,
+                village=village if village != "Property" else None,
+                risk_level=risk_result["risk_level"],
+                khata_number=extraction.khata_number,
+                area_bigha=extraction.area_bigha,
+            )
+            db.add(vault_item)
+            db.commit()
+
+        # Also backfill submission fields from OCR if they were empty
+        if not submission.village_name and extraction.village_name:
+            submission.village_name = extraction.village_name
+        if not submission.plot_number and extraction.plot_number:
+            submission.plot_number = extraction.plot_number
+        if submission.village_name or submission.plot_number:
+            db.commit()
 
     except Exception as e:
         print(f"[Pipeline] Error for submission {submission_id}: {e}")
