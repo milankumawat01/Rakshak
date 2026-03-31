@@ -13,22 +13,28 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// On 401, clear token
+// On 401, clear token and redirect to login
 api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
       localStorage.removeItem("rakshak_token");
       localStorage.removeItem("rakshak_user_id");
-      window.location.href = "/";
+      localStorage.removeItem("rakshak_user_name");
+      localStorage.removeItem("rakshak_user_email");
+      window.location.href = "/login";
     }
     return Promise.reject(err);
   }
 );
 
 // --- Auth ---
-export const sendOTP = (phone) => api.post("/auth/send-otp", { phone });
-export const verifyOTP = (phone, otp) => api.post("/auth/verify-otp", { phone, otp });
+export const signup = (data) => api.post("/auth/signup", data);
+export const verifySignup = (email, otp) => api.post("/auth/verify-signup", { email, otp });
+export const loginRequest = (email) => api.post("/auth/login", { email });
+export const verifyLogin = (email, otp) => api.post("/auth/verify-login", { email, otp });
+export const getProfile = () => api.get("/auth/me");
+export const updateProfile = (data) => api.patch("/auth/me", data);
 export const refreshToken = () => api.post("/auth/refresh");
 
 // --- Submissions ---
@@ -38,7 +44,8 @@ export const uploadSubmission = (formData) =>
   });
 export const getSubmission = (id) => api.get(`/submissions/${id}`);
 export const updateExtraction = (id, data) => api.patch(`/submissions/${id}/extraction`, data);
-export const listSubmissions = () => api.get("/submissions/");
+export const listSubmissions = (q) => api.get("/submissions/", { params: q ? { q } : {} });
+export const deleteSubmission = (id) => api.delete(`/submissions/${id}`);
 
 // --- Vault ---
 export const createVaultItem = (data) => api.post("/vault/", data);
@@ -62,5 +69,9 @@ export const getFreeTierStatus = () => api.get("/payment/free-tier-status");
 export const createPaymentOrder = (submissionId) =>
   api.post("/payment/create-order", { submission_id: submissionId });
 export const getPaymentHistory = () => api.get("/payment/history");
+
+// --- Public (no auth) ---
+export const getPublicReport = (submissionId) =>
+  axios.get(`/api/reports/${submissionId}/public`);
 
 export default api;

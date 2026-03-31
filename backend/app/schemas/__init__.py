@@ -7,12 +7,23 @@ from datetime import datetime
 
 # --- Auth ---
 
-class SendOTPRequest(BaseModel):
-    phone: str = Field(..., example="+919876543210")
+class SignupRequest(BaseModel):
+    name: str
+    email: str
+    phone_number: Optional[str] = None
 
 
-class VerifyOTPRequest(BaseModel):
-    phone: str
+class VerifySignupRequest(BaseModel):
+    email: str
+    otp: str
+
+
+class LoginRequest(BaseModel):
+    email: str
+
+
+class VerifyLoginRequest(BaseModel):
+    email: str
     otp: str
 
 
@@ -20,6 +31,25 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user_id: str
+    name: Optional[str] = None
+    email: Optional[str] = None
+
+
+class UserProfileOut(BaseModel):
+    user_id: str
+    name: Optional[str] = None
+    email: Optional[str] = None
+    phone_number: Optional[str] = None
+    user_type: Optional[str] = None
+    subscription_plan: Optional[str] = None
+    total_submissions: int = 0
+    total_vault_items: int = 0
+    registration_date: Optional[datetime] = None
+
+
+class UpdateProfileRequest(BaseModel):
+    name: Optional[str] = None
+    phone_number: Optional[str] = None
 
 
 # --- Submissions ---

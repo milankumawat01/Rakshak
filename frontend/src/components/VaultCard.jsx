@@ -1,9 +1,10 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MapPin, TrendingUp, TrendingDown } from "lucide-react";
+import { MapPin, TrendingUp, TrendingDown, Trash2 } from "lucide-react";
 import { getRiskColor } from "../lib/riskColors";
 import { useT } from "../lib/i18n";
+import { deleteVaultItem } from "../lib/api";
 
 const formatINR = (val) => {
   if (!val) return null;
@@ -12,11 +13,24 @@ const formatINR = (val) => {
   return `₹${val.toLocaleString("en-IN")}`;
 };
 
-export default function VaultCard({ item, index = 0 }) {
+export default function VaultCard({ item, index = 0, onDeleted }) {
   const cardRef = useRef(null);
   const navigate = useNavigate();
   const { t } = useT();
+  const [deleting, setDeleting] = useState(false);
   const riskColor = getRiskColor(item.risk_level);
+
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    if (!window.confirm(`Delete "${item.property_name || item.vault_name || "this property"}"?`)) return;
+    setDeleting(true);
+    try {
+      await deleteVaultItem(item.vault_id);
+      onDeleted?.(item.vault_id);
+    } catch {
+      setDeleting(false);
+    }
+  };
 
   const name = item.property_name || item.vault_name || t("vault.untitled");
   const currentValue = item.current_market_value;
@@ -48,17 +62,27 @@ export default function VaultCard({ item, index = 0 }) {
       onHoverStart={() => { cardRef.current && (cardRef.current.style.boxShadow = "var(--shadow-card-hover)"); }}
       onHoverEnd={() => { cardRef.current && (cardRef.current.style.boxShadow = "var(--shadow-card)"); }}
     >
-      {/* Header: name + risk badge */}
+      {/* Header: name + risk badge + delete */}
       <div className="flex items-start justify-between mb-3">
         <h3 className="font-semibold text-text-primary truncate pr-2 group-hover:text-gold transition-colors">{name}</h3>
-        {item.risk_level && (
-          <span
-            className="text-xs px-2 py-1 rounded-full font-mono font-medium shrink-0"
-            style={{ backgroundColor: `${riskColor}20`, color: riskColor }}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {item.risk_level && (
+            <span
+              className="text-xs px-2 py-1 rounded-full font-mono font-medium"
+              style={{ backgroundColor: `${riskColor}20`, color: riskColor }}
+            >
+              {item.risk_level}
+            </span>
+          )}
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            className="opacity-0 group-hover:opacity-100 p-1 rounded-lg hover:bg-risk-red/10 text-text-muted hover:text-risk-red transition-all"
+            title="Delete property"
           >
-            {item.risk_level}
-          </span>
-        )}
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* Current value */}

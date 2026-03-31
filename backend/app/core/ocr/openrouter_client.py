@@ -1,14 +1,17 @@
-"""Gemini Vision API wrapper for Khatiyan document OCR."""
+"""OpenRouter API client for Khatiyan document OCR using Claude Vision."""
 
+import base64
 import json
+import os
 import re
 from pathlib import Path
 
-import google.generativeai as genai
+import openai
 
 
-class GeminiVisionClient:
-    MODEL = "gemini-2.0-flash"  # cheapest, fast enough for demo
+class OpenRouterClient:
+    MODEL = "anthropic/claude-sonnet-4-5"
+    BASE_URL = "https://openrouter.ai/api/v1"
 
     PROMPT = """
     You are reading a Jharkhand (India) land document called a Khatiyan.
@@ -49,26 +52,55 @@ class GeminiVisionClient:
     """
 
     def __init__(self, api_key: str):
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(self.MODEL)
+        self.client = openai.OpenAI(
+            api_key=api_key,
+            base_url=self.BASE_URL,
+            default_headers={
+                "HTTP-Referer": "https://bhumirakshak.com",
+                "X-Title": "BhomiRakshak",
+            },
+        )
 
     def extract(self, image_path: str) -> dict:
         try:
-            img_data = Path(image_path).read_bytes()
-            ext = Path(image_path).suffix.lower().strip(".")
-            mime = {
-                "jpg": "image/jpeg",
-                "jpeg": "image/jpeg",
-                "png": "image/png",
-                "pdf": "application/pdf",
-            }.get(ext, "image/jpeg")
-            response = self.model.generate_content([
-                {"mime_type": mime, "data": img_data},
-                self.PROMPT,
-            ])
-            raw = response.text.strip()
+            path = Path(image_path)
+            ext = path.suffix.lower().strip(".")
+
+            # PDF: convert first page to PNG bytes using PyMuPDF
+            if ext == "pdf":
+                import fitz
+                doc = fitz.open(str(path))
+                pix = doc[0].get_pixmap(matrix=fitz.Matrix(2, 2))
+                img_bytes = pix.tobytes("png")
+                doc.close()
+                mime = "image/png"
+            else:
+                img_bytes = path.read_bytes()
+                mime = {
+                    "jpg": "image/jpeg",
+                    "jpeg": "image/jpeg",
+                    "png": "image/png",
+                }.get(ext, "image/jpeg")
+
+            img_b64 = base64.standard_b64encode(img_bytes).decode()
+
+            response = self.client.chat.completions.create(
+                model=self.MODEL,
+                max_tokens=2000,
+                messages=[{
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "image_url",
+                            "image_url": {"url": f"data:{mime};base64,{img_b64}"},
+                        },
+                        {"type": "text", "text": self.PROMPT},
+                    ],
+                }],
+            )
+            raw = response.choices[0].message.content.strip()
             raw = re.sub(r"```(?:json)?", "", raw).strip("` \n")
             return json.loads(raw)
         except Exception as e:
-            print(f"[Gemini] Error: {e}")
-            return {}  # safe empty fallback — never crash
+            print(f"[OpenRouter] Error: {e}")
+            return {}

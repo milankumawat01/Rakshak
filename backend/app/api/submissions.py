@@ -285,14 +285,40 @@ def update_extraction(
     return get_submission(submission_id, user, db)
 
 
-@router.get("/", response_model=list[SubmissionListItem])
-def list_submissions(
+@router.delete("/{submission_id}", status_code=204)
+def delete_submission(
+    submission_id: str,
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    submissions = db.query(Submission).filter(
-        Submission.user_id == user.user_id
-    ).order_by(Submission.created_at.desc()).all()
+    submission = db.query(Submission).filter(
+        Submission.submission_id == submission_id,
+        Submission.user_id == user.user_id,
+    ).first()
+    if not submission:
+        raise HTTPException(status_code=404, detail="Submission not found")
+
+    db.query(KhatiyanExtraction).filter(KhatiyanExtraction.submission_id == submission_id).delete()
+    db.query(RiskAssessment).filter(RiskAssessment.submission_id == submission_id).delete()
+    db.delete(submission)
+    db.commit()
+
+
+@router.get("/", response_model=list[SubmissionListItem])
+def list_submissions(
+    q: str | None = None,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    query = db.query(Submission).filter(Submission.user_id == user.user_id)
+    if q:
+        pattern = f"%{q}%"
+        query = query.filter(
+            (Submission.village_name.ilike(pattern))
+            | (Submission.plot_number.ilike(pattern))
+            | (Submission.seller_name.ilike(pattern))
+        )
+    submissions = query.order_by(Submission.created_at.desc()).all()
 
     return [
         SubmissionListItem(

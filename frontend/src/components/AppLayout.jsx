@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Shield, LayoutDashboard, FolderLock, ScanSearch,
-  Clock, LogOut, Plus,
+  Clock, LogOut, Plus, UserCircle,
 } from "lucide-react";
 import { useAuth } from "../lib/auth";
 import { useT } from "../lib/i18n";
@@ -12,12 +12,13 @@ const navItems = [
   { Icon: FolderLock, labelKey: "nav.vault", path: "/vault" },
   { Icon: ScanSearch, labelKey: "nav.verify", path: "/verify" },
   { Icon: Clock, labelKey: "nav.history", path: "/history" },
+  { Icon: UserCircle, labelKey: "nav.profile", path: "/profile" },
 ];
 
 export default function AppLayout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { logout } = useAuth();
+  const { logout, userName, userEmail } = useAuth();
   const { t, locale, setLocale } = useT();
 
   const currentPath = location.pathname;
@@ -30,6 +31,14 @@ export default function AppLayout({ children }) {
           <Shield className="w-7 h-7 text-accent" />
           <span className="text-xl font-bold text-text-primary">BhomiRakshak</span>
         </div>
+
+        {/* User info */}
+        {userName && (
+          <div className="mb-6 px-4 py-3 bg-bg-input rounded-xl">
+            <p className="text-sm font-medium text-text-primary truncate">{userName}</p>
+            {userEmail && <p className="text-xs text-text-muted truncate">{userEmail}</p>}
+          </div>
+        )}
 
         <nav className="flex-1 space-y-1">
           {navItems.map(({ Icon, labelKey, path }) => {

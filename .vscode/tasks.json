@@ -4,7 +4,7 @@
     {
       "label": "Backend",
       "type": "shell",
-      "command": "cd backend; ./venv/Scripts/python.exe -m uvicorn main:app --reload --port 8000",
+      "command": "cd backend && source venv/bin/activate && uvicorn main:app --reload --port 8000",
       "isBackground": true,
       "problemMatcher": [],
       "presentation": {
@@ -16,7 +16,7 @@
     {
       "label": "Frontend",
       "type": "shell",
-      "command": "cd frontend; npm run dev",
+      "command": "cd frontend && npm run dev",
       "isBackground": true,
       "problemMatcher": [],
       "presentation": {
@@ -33,6 +33,54 @@
       "runOptions": {
         "runOn": "default"
       }
+    },
+    {
+      "label": "DB Migrate (autogenerate)",
+      "type": "shell",
+      "command": "cd backend && source venv/bin/activate && alembic revision --autogenerate -m \"${input:migrationMessage}\"",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "DB Upgrade (head)",
+      "type": "shell",
+      "command": "cd backend && source venv/bin/activate && alembic upgrade head",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Run Tests",
+      "type": "shell",
+      "command": "cd backend && source venv/bin/activate && pytest",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Frontend Build",
+      "type": "shell",
+      "command": "cd frontend && npm run build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "migrationMessage",
+      "type": "promptString",
+      "description": "Migration description",
+      "default": "update"
     }
   ]
 }

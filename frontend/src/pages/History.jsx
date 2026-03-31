@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Clock, ChevronRight, RefreshCw } from "lucide-react";
+import { Clock, ChevronRight, RefreshCw, Search } from "lucide-react";
 import { listSubmissions, listVaultItems } from "../lib/api";
 import { useT } from "../lib/i18n";
 import { getRiskColor } from "../lib/riskColors";
@@ -10,10 +11,11 @@ import AppLayout from "../components/AppLayout";
 export default function History() {
   const navigate = useNavigate();
   const { t } = useT();
+  const [search, setSearch] = useState("");
 
   const { data: submissions = [], refetch } = useQuery({
-    queryKey: ["submissions"],
-    queryFn: () => listSubmissions().then((r) => r.data),
+    queryKey: ["submissions", search],
+    queryFn: () => listSubmissions(search || undefined).then((r) => r.data),
   });
 
   const { data: vaultItems = [] } = useQuery({
@@ -60,6 +62,18 @@ export default function History() {
         >
           <RefreshCw className="w-4 h-4" />
         </button>
+      </div>
+
+      {/* Search */}
+      <div className="relative mb-4">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+        <input
+          type="text"
+          placeholder="Search by village, plot, or seller name..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full bg-bg-card border border-border rounded-xl pl-10 pr-4 py-3 text-sm focus:border-accent focus:outline-none text-text-primary"
+        />
       </div>
 
       {submissions.length === 0 ? (

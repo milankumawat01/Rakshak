@@ -1,56 +1,22 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Shield, Upload, Database, ScanSearch, ClipboardCheck, BarChart3,
-  FileCheck, Phone, ArrowRight, Monitor, CheckCircle
+  FileCheck, ArrowRight, Monitor, CheckCircle
 } from "lucide-react";
-import toast from "react-hot-toast";
-import { sendOTP, verifyOTP } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { useT } from "../lib/i18n";
 import RiskScoreGauge from "../components/RiskScoreGauge";
 
 export default function Landing() {
   const navigate = useNavigate();
-  const { isLoggedIn, login } = useAuth();
+  const { isLoggedIn } = useAuth();
   const { t, locale, setLocale } = useT();
-  const [showLogin, setShowLogin] = useState(false);
-  const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const handleSendOTP = async () => {
-    if (!phone) return;
-    setLoading(true);
-    try {
-      await sendOTP(phone);
-      setOtpSent(true);
-      toast.success(t("landing.otp_sent"));
-    } catch {
-      toast.error(t("landing.otp_failed"));
-    }
-    setLoading(false);
-  };
-
-  const handleVerify = async () => {
-    setLoading(true);
-    try {
-      const { data } = await verifyOTP(phone, otp);
-      login(data.access_token, data.user_id);
-      toast.success(t("landing.logged_in"));
-      navigate("/verify");
-    } catch {
-      toast.error(t("landing.invalid_otp"));
-    }
-    setLoading(false);
-  };
 
   const handleCTA = () => {
     if (isLoggedIn) {
       navigate("/verify");
     } else {
-      setShowLogin(true);
+      navigate("/signup");
     }
   };
 
@@ -109,12 +75,20 @@ export default function Landing() {
                 {t("common.dashboard")}
               </button>
             ) : (
-              <button
-                onClick={() => setShowLogin(true)}
-                className="px-4 py-1.5 text-sm bg-accent hover:bg-accent-hover text-white font-medium rounded-lg transition-colors"
-              >
-                {t("common.login")}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => navigate("/login")}
+                  className="px-4 py-1.5 text-sm border border-border text-text-muted hover:text-text-primary font-medium rounded-lg transition-colors"
+                >
+                  {t("common.login")}
+                </button>
+                <button
+                  onClick={() => navigate("/signup")}
+                  className="px-4 py-1.5 text-sm bg-accent hover:bg-accent-hover text-white font-medium rounded-lg transition-colors"
+                >
+                  Sign Up
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -302,59 +276,6 @@ export default function Landing() {
         </div>
       </footer>
 
-      {/* Login Modal */}
-      {showLogin && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-          <div className="bg-bg-card rounded-2xl p-8 w-full max-w-sm border border-border shadow-xl">
-            <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-text-primary">
-              <Phone className="w-5 h-5 text-accent" /> {t("common.login")}
-            </h2>
-            {!otpSent ? (
-              <>
-                <input
-                  type="tel"
-                  placeholder={t("landing.phone_placeholder")}
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full bg-bg-input border border-border rounded-lg px-4 py-3 mb-4 text-sm focus:border-accent focus:outline-none text-text-primary"
-                />
-                <button
-                  onClick={handleSendOTP}
-                  disabled={loading}
-                  className="w-full py-3 bg-accent hover:bg-accent-hover text-white rounded-lg font-medium transition-colors disabled:opacity-50"
-                >
-                  {loading ? t("common.sending") : t("common.send_otp")}
-                </button>
-              </>
-            ) : (
-              <>
-                <p className="text-sm text-text-muted mb-3">{t("landing.enter_otp")} {phone}</p>
-                <input
-                  type="text"
-                  placeholder={t("landing.otp_placeholder")}
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  className="w-full bg-bg-input border border-border rounded-lg px-4 py-3 mb-4 text-sm text-center font-mono tracking-widest focus:border-accent focus:outline-none text-text-primary"
-                  maxLength={6}
-                />
-                <button
-                  onClick={handleVerify}
-                  disabled={loading}
-                  className="w-full py-3 bg-accent hover:bg-accent-hover text-white rounded-lg font-medium transition-colors disabled:opacity-50"
-                >
-                  {loading ? t("common.verifying") : t("common.verify_login")}
-                </button>
-              </>
-            )}
-            <button
-              onClick={() => { setShowLogin(false); setOtpSent(false); }}
-              className="w-full mt-3 py-2 text-sm text-text-muted hover:text-text-primary transition-colors"
-            >
-              {t("common.cancel")}
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

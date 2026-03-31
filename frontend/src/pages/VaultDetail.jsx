@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft, Trash2, LayoutList, FileText, TrendingUp, Clock, ShieldCheck,
+  ArrowLeft, Trash2, LayoutList, FileText, TrendingUp, Clock, ShieldCheck, Share2,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { getVaultItem, getSubmission, deleteVaultItem } from "../lib/api";
@@ -128,6 +128,19 @@ export default function VaultDetail() {
                 >
                   {vault.risk_level} {vault.risk_level === "GREEN" ? (t("vault.verified_status") || "Verified") : ""}
                 </span>
+              )}
+              {vault.submission_id && (
+                <button
+                  onClick={() => {
+                    const url = `${window.location.origin}/report/${vault.submission_id}`;
+                    navigator.clipboard.writeText(url);
+                    toast.success("Report link copied to clipboard!");
+                  }}
+                  className="p-2 text-text-muted hover:text-accent transition-colors"
+                  title="Share report link"
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
               )}
               <button
                 onClick={() => {

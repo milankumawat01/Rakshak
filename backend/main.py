@@ -25,6 +25,8 @@ from app.api.auth import router as auth_router
 from app.api.submissions import router as submissions_router
 from app.api.vault import router as vault_router
 from app.api.payment import router as payment_router
+from app.api.reports import router as reports_router
+from app.api.whatsapp import router as whatsapp_router
 
 app = FastAPI(
     title="BhomiRakshak API",
@@ -54,6 +56,8 @@ app.include_router(auth_router)
 app.include_router(submissions_router)
 app.include_router(vault_router)
 app.include_router(payment_router)
+app.include_router(reports_router)
+app.include_router(whatsapp_router)
 
 # Mount uploads directory as static files
 upload_dir = os.getenv("UPLOAD_DIR", "./uploads")

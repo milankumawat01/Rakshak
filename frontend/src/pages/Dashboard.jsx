@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import {
   FolderLock, Plus, AlertTriangle, ChevronRight, RefreshCw,
-  TrendingUp, TrendingDown, IndianRupee, Building2,
+  TrendingUp, TrendingDown, IndianRupee, Building2, Trash2,
 } from "lucide-react";
-import { listVaultItems, listSubmissions, getVaultSummary } from "../lib/api";
+import { listVaultItems, listSubmissions, getVaultSummary, deleteSubmission } from "../lib/api";
 import { useT } from "../lib/i18n";
 import { getRiskColor } from "../lib/riskColors";
 import VaultCard from "../components/VaultCard";
@@ -49,6 +49,17 @@ export default function Dashboard() {
     refetchVault();
     refetchSubmissions();
     refetchSummary();
+  };
+
+  const handleDeleteSubmission = async (e, submissionId) => {
+    e.stopPropagation();
+    if (!window.confirm("Delete this submission?")) return;
+    try {
+      await deleteSubmission(submissionId);
+      window.location.reload();
+    } catch {
+      // ignore
+    }
   };
 
   const riskBadge = (level) => {
@@ -213,7 +224,7 @@ export default function Dashboard() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {vaultItems.slice(0, 6).map((item, i) => (
-              <VaultCard key={item.vault_id} item={item} index={i} />
+              <VaultCard key={item.vault_id} item={item} index={i} onDeleted={() => window.location.reload()} />
             ))}
           </div>
         )}
@@ -240,7 +251,7 @@ export default function Dashboard() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06 }}
-                className="flex items-center justify-between bg-bg-card rounded-xl px-5 py-3.5 border border-border border-l-4 border-l-accent/40 hover:border-l-accent cursor-pointer transition-all hover:-translate-y-0.5"
+                className="group flex items-center justify-between bg-bg-card rounded-xl px-5 py-3.5 border border-border border-l-4 border-l-accent/40 hover:border-l-accent cursor-pointer transition-all hover:-translate-y-0.5"
                 style={{ boxShadow: "var(--shadow-card)" }}
                 onClick={() => s.submission_status === "completed" && navigate(`/vault/${subToVault[s.submission_id] || s.submission_id}`)}
               >
@@ -257,6 +268,13 @@ export default function Dashboard() {
                 <div className="flex items-center gap-3">
                   {riskBadge(s.risk_level)}
                   {statusBadge(s.submission_status)}
+                  <button
+                    onClick={(e) => handleDeleteSubmission(e, s.submission_id)}
+                    className="p-1.5 rounded-lg text-text-muted hover:text-risk-red hover:bg-risk-red/10 transition-all opacity-0 group-hover:opacity-100"
+                    title="Delete submission"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </motion.div>
             ))}
