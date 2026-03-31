@@ -3,7 +3,7 @@ __pycache__/
 *.pyo
 venv/
 .venv/
-rakshak.db
+
 **/uploads/*
 !**/uploads/.gitkeep
 .env

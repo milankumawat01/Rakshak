@@ -31,11 +31,11 @@ export default function Vault() {
   return (
     <AppLayout>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-text-primary">{t("dashboard.your_vault")}</h1>
+        <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}>{t("dashboard.your_vault")}</h1>
         <button
           onClick={() => navigate("/vault/add")}
-          className="flex items-center gap-2 px-4 py-2 bg-gold hover:bg-gold-hover text-white rounded-lg text-sm font-medium transition-all active:scale-95"
-          style={{ boxShadow: "var(--shadow-gold)" }}
+          className="flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all active:scale-95 hover:opacity-90"
+          style={{ backgroundColor: "var(--color-gold)", color: "var(--color-navy)", boxShadow: "var(--shadow-gold)" }}
         >
           <Plus className="w-4 h-4" /> {t("vault.add_property") || "Add Property"}
         </button>
@@ -58,8 +58,8 @@ export default function Vault() {
               className="bg-bg-card rounded-xl p-4 border border-border"
               style={{ boxShadow: "var(--shadow-stat)" }}
             >
-              <p className="text-xs text-text-muted mb-1">{s.label}</p>
-              <p className={`text-xl font-bold font-mono ${s.cls}`}>{s.value}</p>
+              <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--color-text-muted)" }}>{s.label}</p>
+              <p className={`text-xl font-bold ${s.cls}`} style={{ fontFamily: "var(--font-serif)" }}>{s.value}</p>
             </motion.div>
           ))}
         </div>
@@ -72,7 +72,8 @@ export default function Vault() {
           <p className="text-sm mt-1">{t("dashboard.no_vault_subtitle")}</p>
           <button
             onClick={() => navigate("/vault/add")}
-            className="mt-4 px-4 py-2 bg-gold hover:bg-gold-hover text-white rounded-lg text-sm font-medium transition-all active:scale-95"
+            className="mt-4 px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all active:scale-95 hover:opacity-90"
+            style={{ backgroundColor: "var(--color-gold)", color: "var(--color-navy)", boxShadow: "var(--shadow-gold)" }}
             style={{ boxShadow: "var(--shadow-gold)" }}
           >
             {t("vault.add_property") || "Add Property"}

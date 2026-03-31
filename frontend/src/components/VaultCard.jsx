@@ -56,7 +56,10 @@ export default function VaultCard({ item, index = 0, onDeleted }) {
       whileHover={{ y: -4 }}
       transition={{ duration: 0.3, delay: index * 0.08 }}
       onClick={() => navigate(`/vault/${item.vault_id}`)}
-      className="bg-bg-card rounded-2xl p-5 border border-border hover:border-gold cursor-pointer transition-shadow group gradient-gold-subtle"
+      className="bg-bg-card p-5 border cursor-pointer transition-all group"
+      style={{ borderColor: "var(--color-border)" }}
+      onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--color-gold)"; }}
+      onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--color-border)"; }}
       style={{ boxShadow: "var(--shadow-card)" }}
       whileTap={{ scale: 0.98 }}
       onHoverStart={() => { cardRef.current && (cardRef.current.style.boxShadow = "var(--shadow-card-hover)"); }}
@@ -64,7 +67,7 @@ export default function VaultCard({ item, index = 0, onDeleted }) {
     >
       {/* Header: name + risk badge + delete */}
       <div className="flex items-start justify-between mb-3">
-        <h3 className="font-semibold text-text-primary truncate pr-2 group-hover:text-gold transition-colors">{name}</h3>
+        <h3 className="font-bold truncate pr-2 transition-colors text-sm uppercase tracking-wide group-hover:text-[var(--color-gold)]" style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}>{name}</h3>
         <div className="flex items-center gap-1.5 shrink-0">
           {item.risk_level && (
             <span
@@ -88,7 +91,7 @@ export default function VaultCard({ item, index = 0, onDeleted }) {
       {/* Current value */}
       <div className="mb-2">
         {currentValue ? (
-          <p className="text-2xl font-bold font-mono text-text-primary">
+          <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}>
             {formatINR(currentValue)}
           </p>
         ) : (
@@ -128,7 +131,7 @@ export default function VaultCard({ item, index = 0, onDeleted }) {
           </span>
         )}
         {item.land_type && (
-          <span className="px-1.5 py-0.5 bg-gold/10 text-gold rounded-full capitalize text-[11px] font-medium">
+          <span className="px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-widest" style={{ backgroundColor: "rgba(212,175,55,0.1)", color: "var(--color-gold)" }}>
             {item.land_type}
           </span>
         )}

@@ -8,7 +8,7 @@ import { useAuth } from "../lib/auth";
 export default function Signup() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [step, setStep] = useState(1); // 1=form, 2=otp
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone_number: "" });
   const [otp, setOtp] = useState("");
@@ -42,104 +42,149 @@ export default function Signup() {
     setLoading(false);
   };
 
+  const inputStyle = {
+    backgroundColor: "var(--color-bg-input)",
+    borderColor: "var(--color-border)",
+    color: "var(--color-text-primary)",
+  };
+
   return (
-    <div className="min-h-screen bg-bg-base flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4 py-10" style={{ backgroundColor: "var(--color-bg-base)" }}>
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Shield className="w-8 h-8 text-accent" />
-            <span className="text-2xl font-bold text-text-primary">BhomiRakshak</span>
+        {/* Logo */}
+        <div className="text-center mb-10">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Shield className="w-8 h-8" style={{ color: "var(--color-gold)" }} />
+            <div className="flex flex-col leading-none text-left">
+              <span className="text-lg font-bold uppercase tracking-wide" style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}>BhumiRakshak</span>
+              <span className="text-sm italic" style={{ fontFamily: "var(--font-display)", color: "var(--color-teal)" }}>Land Verification</span>
+            </div>
           </div>
-          <h1 className="text-xl font-semibold text-text-primary">Create your account</h1>
-          <p className="text-text-muted text-sm mt-1">Land verification made simple</p>
+          <div className="h-px w-16 mx-auto mb-4" style={{ backgroundColor: "var(--color-gold)" }}></div>
+          <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}>Create Your Account</h1>
+          <p className="text-sm mt-1" style={{ color: "var(--color-text-muted)" }}>Land verification made simple</p>
         </div>
 
-        <div className="bg-bg-card rounded-2xl p-8 border border-border shadow-lg">
+        <div className="bg-white p-8 border" style={{ borderColor: "var(--color-border)" }}>
           {step === 1 ? (
-            <form onSubmit={handleSignup} className="space-y-4">
+            <form onSubmit={handleSignup} className="space-y-5">
               <div>
-                <label className="text-sm font-medium text-text-muted mb-1 block">Full Name *</label>
+                <label className="block text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--color-navy)" }}>
+                  Full Name <span style={{ color: "var(--color-risk-red)" }}>*</span>
+                </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--color-text-muted)" }} />
                   <input
                     type="text"
                     placeholder="Your full name"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="w-full bg-bg-input border border-border rounded-lg pl-10 pr-4 py-3 text-sm focus:border-accent focus:outline-none text-text-primary"
+                    className="w-full pl-10 pr-4 py-3 text-sm border focus:outline-none transition-colors"
+                    style={inputStyle}
+                    onFocus={(e) => e.target.style.borderColor = "var(--color-gold)"}
+                    onBlur={(e) => e.target.style.borderColor = "var(--color-border)"}
                     required
                   />
                 </div>
               </div>
               <div>
-                <label className="text-sm font-medium text-text-muted mb-1 block">Email *</label>
+                <label className="block text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--color-navy)" }}>
+                  Email Address <span style={{ color: "var(--color-risk-red)" }}>*</span>
+                </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--color-text-muted)" }} />
                   <input
                     type="email"
                     placeholder="you@example.com"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="w-full bg-bg-input border border-border rounded-lg pl-10 pr-4 py-3 text-sm focus:border-accent focus:outline-none text-text-primary"
+                    className="w-full pl-10 pr-4 py-3 text-sm border focus:outline-none transition-colors"
+                    style={inputStyle}
+                    onFocus={(e) => e.target.style.borderColor = "var(--color-gold)"}
+                    onBlur={(e) => e.target.style.borderColor = "var(--color-border)"}
                     required
                   />
                 </div>
               </div>
               <div>
-                <label className="text-sm font-medium text-text-muted mb-1 block">Phone (optional)</label>
+                <label className="block text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--color-navy)" }}>
+                  Phone <span style={{ color: "var(--color-text-muted)", fontWeight: 400, textTransform: "none", letterSpacing: "normal" }}>(optional)</span>
+                </label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--color-text-muted)" }} />
                   <input
                     type="tel"
                     placeholder="+91 98765 43210"
                     value={form.phone_number}
                     onChange={(e) => setForm({ ...form, phone_number: e.target.value })}
-                    className="w-full bg-bg-input border border-border rounded-lg pl-10 pr-4 py-3 text-sm focus:border-accent focus:outline-none text-text-primary"
+                    className="w-full pl-10 pr-4 py-3 text-sm border focus:outline-none transition-colors"
+                    style={inputStyle}
+                    onFocus={(e) => e.target.style.borderColor = "var(--color-gold)"}
+                    onBlur={(e) => e.target.style.borderColor = "var(--color-border)"}
                   />
                 </div>
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-accent hover:bg-accent-hover text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full h-12 text-xs font-bold uppercase tracking-widest transition-all disabled:opacity-50 flex items-center justify-center gap-2 hover:opacity-90"
+                style={{ backgroundColor: "var(--color-gold)", color: "var(--color-navy)" }}
               >
                 {loading ? "Sending OTP..." : <>Sign Up <ArrowRight className="w-4 h-4" /></>}
               </button>
             </form>
           ) : (
-            <form onSubmit={handleVerify} className="space-y-4">
-              <p className="text-sm text-text-muted text-center">
-                We sent a 6-digit code to <span className="font-medium text-text-primary">{form.email}</span>
+            <form onSubmit={handleVerify} className="space-y-5">
+              <p className="text-sm text-center" style={{ color: "var(--color-text-muted)" }}>
+                We sent a 6-digit code to{" "}
+                <span className="font-bold" style={{ color: "var(--color-navy)" }}>{form.email}</span>
               </p>
-              <input
-                type="text"
-                placeholder="Enter 6-digit OTP"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                className="w-full bg-bg-input border border-border rounded-lg px-4 py-3 text-sm text-center font-mono tracking-widest focus:border-accent focus:outline-none text-text-primary"
-                maxLength={6}
-                autoFocus
-              />
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--color-navy)" }}>
+                  Verification Code
+                </label>
+                <input
+                  type="text"
+                  placeholder="000000"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="w-full px-4 py-3 text-center text-lg border focus:outline-none transition-colors tracking-widest"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    backgroundColor: "var(--color-bg-input)",
+                    borderColor: "var(--color-border)",
+                    color: "var(--color-text-primary)",
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = "var(--color-gold)"}
+                  onBlur={(e) => e.target.style.borderColor = "var(--color-border)"}
+                  maxLength={6}
+                  autoFocus
+                />
+              </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-accent hover:bg-accent-hover text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+                className="w-full h-12 text-xs font-bold uppercase tracking-widest transition-all disabled:opacity-50 hover:opacity-90"
+                style={{ backgroundColor: "var(--color-gold)", color: "var(--color-navy)" }}
               >
                 {loading ? "Verifying..." : "Verify & Create Account"}
               </button>
               <button
                 type="button"
                 onClick={() => { setStep(1); setOtp(""); }}
-                className="w-full py-2 text-sm text-text-muted hover:text-text-primary transition-colors"
+                className="w-full py-2 text-xs font-bold uppercase tracking-widest transition-colors"
+                style={{ color: "var(--color-text-muted)" }}
               >
                 Back to signup form
               </button>
             </form>
           )}
 
-          <div className="mt-6 pt-4 border-t border-border text-center text-sm text-text-muted">
+          <div className="mt-6 pt-5 border-t text-center text-sm" style={{ borderColor: "var(--color-border)", color: "var(--color-text-muted)" }}>
             Already have an account?{" "}
-            <Link to="/login" className="text-accent hover:underline font-medium">Log in</Link>
+            <Link to="/login" className="font-bold uppercase tracking-widest text-xs transition-colors hover:opacity-80" style={{ color: "var(--color-teal)" }}>
+              Log in
+            </Link>
           </div>
         </div>
       </div>

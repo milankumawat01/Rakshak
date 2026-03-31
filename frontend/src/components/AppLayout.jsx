@@ -26,42 +26,49 @@ export default function AppLayout({ children }) {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <aside className="hidden md:flex flex-col w-64 bg-bg-card border-r border-border p-6">
-        <div className="flex items-center gap-2 mb-10 cursor-pointer" onClick={() => navigate("/")}>
-          <Shield className="w-7 h-7 text-accent" />
-          <span className="text-xl font-bold text-text-primary">BhomiRakshak</span>
+      <aside className="hidden md:flex flex-col w-64 border-r border-white/10 p-6" style={{ backgroundColor: "var(--color-navy-deep)" }}>
+        <div className="flex items-center gap-3 mb-10 cursor-pointer" onClick={() => navigate("/")}>
+          <Shield className="w-7 h-7" style={{ color: "var(--color-gold)" }} />
+          <div className="flex flex-col leading-none">
+            <span className="text-base font-bold text-white uppercase tracking-wide" style={{ fontFamily: "var(--font-serif)" }}>BhumiRakshak</span>
+            <span className="text-xs italic" style={{ fontFamily: "var(--font-display)", color: "var(--color-teal)" }}>Land Verification</span>
+          </div>
         </div>
 
         {/* User info */}
         {userName && (
-          <div className="mb-6 px-4 py-3 bg-bg-input rounded-xl">
-            <p className="text-sm font-medium text-text-primary truncate">{userName}</p>
-            {userEmail && <p className="text-xs text-text-muted truncate">{userEmail}</p>}
+          <div className="mb-6 px-4 py-3 border border-white/10 rounded-sm">
+            <p className="text-sm font-bold text-white truncate uppercase tracking-wide">{userName}</p>
+            {userEmail && <p className="text-xs truncate mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>{userEmail}</p>}
           </div>
         )}
 
-        <nav className="flex-1 space-y-1">
+        <nav className="flex-1 space-y-0.5">
           {navItems.map(({ Icon, labelKey, path }) => {
             const isActive = currentPath === path || currentPath.startsWith(path + "/");
             return (
               <button
                 key={labelKey}
                 onClick={() => navigate(path)}
-                className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-colors ${
+                className={`relative w-full flex items-center gap-3 px-4 py-3 text-xs font-bold uppercase tracking-widest transition-colors ${
                   isActive
-                    ? "text-accent"
-                    : "text-text-muted hover:text-text-primary hover:bg-bg-input"
+                    ? ""
+                    : "hover:bg-white/5"
                 }`}
+                style={{
+                  color: isActive ? "var(--color-gold)" : "rgba(255,255,255,0.6)",
+                }}
               >
                 {isActive && (
                   <motion.div
                     layoutId="sidebar-active"
-                    className="absolute inset-0 bg-accent/10 rounded-xl"
+                    className="absolute inset-0 rounded-sm"
+                    style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
                 <span className="relative flex items-center gap-3">
-                  <Icon className="w-4.5 h-4.5" />
+                  <Icon className="w-4 h-4" />
                   {t(labelKey)}
                 </span>
               </button>
@@ -69,56 +76,58 @@ export default function AppLayout({ children }) {
           })}
         </nav>
 
-        <div className="space-y-2">
+        <div className="space-y-2 border-t border-white/10 pt-4">
           <button
             onClick={() => setLocale(locale === "en" ? "hi" : "en")}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-text-muted border border-border rounded-xl hover:bg-bg-input transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest border border-white/20 rounded-sm transition-colors hover:border-white/40"
+            style={{ color: "rgba(255,255,255,0.6)" }}
           >
             {locale === "en" ? "हिंदी" : "English"}
           </button>
           <button
             onClick={() => { logout(); navigate("/"); }}
-            className="flex items-center gap-3 px-4 py-3 text-sm text-text-muted hover:text-risk-red transition-colors"
+            className="flex items-center gap-3 px-4 py-3 text-xs font-bold uppercase tracking-widest transition-colors hover:text-white"
+            style={{ color: "rgba(255,255,255,0.4)" }}
           >
-            <LogOut className="w-4.5 h-4.5" /> {t("common.logout")}
+            <LogOut className="w-4 h-4" /> {t("common.logout")}
           </button>
         </div>
       </aside>
 
-      {/* Mobile nav */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-bg-card border-b border-border px-4 py-3 flex items-center justify-between">
+      {/* Mobile top bar */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 border-b border-white/10 px-4 py-3 flex items-center justify-between" style={{ backgroundColor: "var(--color-navy-deep)" }}>
         <div className="flex items-center gap-2">
-          <Shield className="w-6 h-6 text-accent" />
-          <span className="text-lg font-bold text-text-primary">BhomiRakshak</span>
+          <Shield className="w-5 h-5" style={{ color: "var(--color-gold)" }} />
+          <span className="text-base font-bold text-white uppercase tracking-wide" style={{ fontFamily: "var(--font-serif)" }}>BhumiRakshak</span>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setLocale(locale === "en" ? "hi" : "en")}
-            className="px-2.5 py-1.5 text-xs font-medium border border-border rounded-lg text-text-muted"
+            className="px-2.5 py-1.5 text-xs font-bold border border-white/20 rounded-sm uppercase tracking-widest"
+            style={{ color: "rgba(255,255,255,0.6)" }}
           >
             {locale === "en" ? "हिं" : "EN"}
           </button>
           <button
             onClick={() => navigate("/vault/add")}
-            className="p-2 bg-gold rounded-lg active:scale-95 transition-transform"
-            style={{ boxShadow: "var(--shadow-gold)" }}
+            className="p-2 rounded-sm active:scale-95 transition-transform"
+            style={{ backgroundColor: "var(--color-gold)", boxShadow: "var(--shadow-gold)" }}
           >
-            <Plus className="w-5 h-5 text-white" />
+            <Plus className="w-5 h-5" style={{ color: "var(--color-navy)" }} />
           </button>
         </div>
       </div>
 
       {/* Mobile bottom tabs */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-bg-card border-t border-border flex">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 flex" style={{ backgroundColor: "var(--color-navy-deep)" }}>
         {navItems.map(({ Icon, labelKey, path }) => {
           const isActive = currentPath === path || currentPath.startsWith(path + "/");
           return (
             <button
               key={labelKey}
               onClick={() => navigate(path)}
-              className={`flex-1 flex flex-col items-center gap-1 py-3 text-xs transition-colors ${
-                isActive ? "text-accent" : "text-text-muted"
-              }`}
+              className="flex-1 flex flex-col items-center gap-1 py-3 text-xs transition-colors"
+              style={{ color: isActive ? "var(--color-gold)" : "rgba(255,255,255,0.5)" }}
             >
               <Icon className="w-5 h-5" />
               {t(labelKey)}

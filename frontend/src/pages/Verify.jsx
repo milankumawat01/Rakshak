@@ -151,19 +151,20 @@ export default function Verify() {
           {(Array.isArray(stepLabels) ? stepLabels : []).map((label, i) => (
             <div key={i} className="flex items-center gap-2">
               <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium ${
-                  i <= step
-                    ? "bg-accent text-white"
-                    : "bg-bg-input text-text-muted border border-border"
-                }`}
+                className="w-7 h-7 flex items-center justify-center text-xs font-bold"
+                style={{
+                  backgroundColor: i <= step ? "var(--color-gold)" : "var(--color-bg-input)",
+                  color: i <= step ? "var(--color-navy)" : "var(--color-text-muted)",
+                  border: i <= step ? "none" : "1px solid var(--color-border)",
+                }}
               >
                 {i + 1}
               </div>
-              <span className={`text-xs ${i <= step ? "text-text-primary" : "text-text-muted"}`}>
+              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: i <= step ? "var(--color-navy)" : "var(--color-text-muted)" }}>
                 {label}
               </span>
               {i < 5 && (
-                <div className={`w-6 h-px ${i < step ? "bg-accent" : "bg-border"}`} />
+                <div className="w-6 h-px" style={{ backgroundColor: i < step ? "var(--color-gold)" : "var(--color-border)" }} />
               )}
             </div>
           ))}
@@ -173,16 +174,16 @@ export default function Verify() {
         {/* Step 0: Upload + Details combined */}
         {step === STEP_UPLOAD && (
           <div>
-            <h2 className="text-2xl font-bold mb-2 text-text-primary">{t("verify.upload_title")}</h2>
+            <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}>{t("verify.upload_title")}</h2>
             <p className="text-text-muted mb-8">{t("verify.upload_subtitle")}</p>
 
             <div
               {...getRootProps()}
-              className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-colors ${
-                isDragActive
-                  ? "border-accent bg-accent/5"
-                  : "border-border hover:border-accent/50"
-              }`}
+              className="border-2 border-dashed p-10 text-center cursor-pointer transition-colors"
+              style={{
+                borderColor: isDragActive ? "var(--color-gold)" : "var(--color-navy)",
+                backgroundColor: isDragActive ? "rgba(212,175,55,0.04)" : "transparent",
+              }}
             >
               <input {...getInputProps()} />
               {preview ? (
@@ -192,7 +193,7 @@ export default function Verify() {
                 </div>
               ) : (
                 <>
-                  <Upload className="w-12 h-12 text-accent mx-auto mb-4" />
+                  <Upload className="w-12 h-12 mx-auto mb-4" style={{ color: "var(--color-teal)" }} />
                   <p className="text-text-primary font-medium">{t("verify.drag_drop")}</p>
                   <p className="text-sm text-text-muted mt-1">{t("verify.file_formats")}</p>
                 </>
@@ -207,7 +208,10 @@ export default function Verify() {
                   <input
                     value={details.village_name}
                     onChange={(e) => setDetails({ ...details, village_name: e.target.value })}
-                    className="w-full bg-bg-input border border-border rounded-xl px-4 py-3 text-sm focus:border-accent focus:outline-none text-text-primary"
+                    className="w-full px-4 py-3 text-sm border focus:outline-none transition-colors"
+                    style={{ backgroundColor: "var(--color-bg-input)", borderColor: "var(--color-border)", color: "var(--color-text-primary)" }}
+                    onFocus={(e) => e.target.style.borderColor = "var(--color-gold)"}
+                    onBlur={(e) => e.target.style.borderColor = "var(--color-border)"}
                     placeholder={t("verify.village_placeholder")}
                   />
                 </div>
@@ -216,7 +220,10 @@ export default function Verify() {
                   <input
                     value={details.plot_number}
                     onChange={(e) => setDetails({ ...details, plot_number: e.target.value })}
-                    className="w-full bg-bg-input border border-border rounded-xl px-4 py-3 text-sm font-mono focus:border-accent focus:outline-none text-text-primary"
+                    className="w-full px-4 py-3 text-sm font-mono border focus:outline-none transition-colors"
+                    style={{ backgroundColor: "var(--color-bg-input)", borderColor: "var(--color-border)", color: "var(--color-text-primary)" }}
+                    onFocus={(e) => e.target.style.borderColor = "var(--color-gold)"}
+                    onBlur={(e) => e.target.style.borderColor = "var(--color-border)"}
                     placeholder={t("verify.plot_placeholder")}
                   />
                 </div>
@@ -226,7 +233,10 @@ export default function Verify() {
                 <input
                   value={details.seller_name}
                   onChange={(e) => setDetails({ ...details, seller_name: e.target.value })}
-                  className="w-full bg-bg-input border border-border rounded-xl px-4 py-3 text-sm focus:border-accent focus:outline-none text-text-primary"
+                  className="w-full px-4 py-3 text-sm border focus:outline-none transition-colors"
+                    style={{ backgroundColor: "var(--color-bg-input)", borderColor: "var(--color-border)", color: "var(--color-text-primary)" }}
+                    onFocus={(e) => e.target.style.borderColor = "var(--color-gold)"}
+                    onBlur={(e) => e.target.style.borderColor = "var(--color-border)"}
                   placeholder={t("verify.seller_placeholder")}
                 />
               </div>
@@ -257,7 +267,8 @@ export default function Verify() {
               <button
                 onClick={handleSubmit}
                 disabled={!file || loading}
-                className="flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-white rounded-xl font-medium disabled:opacity-30 transition-colors min-h-12"
+                className="flex items-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-widest disabled:opacity-30 transition-colors min-h-12 hover:opacity-90"
+                style={{ backgroundColor: "var(--color-gold)", color: "var(--color-navy)" }}
               >
                 {loading ? t("common.submitting") : t("common.start_analysis")} <ArrowRight className="w-4 h-4" />
               </button>
@@ -271,7 +282,7 @@ export default function Verify() {
             <div className="w-16 h-16 bg-risk-green/10 rounded-full flex items-center justify-center mb-6">
               <Database className="w-8 h-8 text-risk-green" />
             </div>
-            <h2 className="text-2xl font-bold mb-2 text-text-primary">{t("verify.store_title")}</h2>
+            <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}>{t("verify.store_title")}</h2>
             <p className="text-text-muted mb-8">{t("verify.store_subtitle")}</p>
 
             <div className="bg-bg-card rounded-2xl p-6 border border-border w-full max-w-sm text-left space-y-3">
@@ -298,7 +309,8 @@ export default function Verify() {
               </button>
               <button
                 onClick={() => setStep(STEP_OCR)}
-                className="flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-white rounded-xl font-medium transition-colors min-h-12"
+                className="flex items-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-widest transition-colors min-h-12 hover:opacity-90"
+                style={{ backgroundColor: "var(--color-gold)", color: "var(--color-navy)" }}
               >
                 {t("verify.continue")} <ArrowRight className="w-4 h-4" />
               </button>

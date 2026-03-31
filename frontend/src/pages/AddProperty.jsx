@@ -158,7 +158,8 @@ export default function AddProperty() {
     <button
       type="button"
       onClick={() => toggleSection(sectionKey)}
-      className="w-full flex items-center justify-between py-3 text-lg font-semibold text-text-primary"
+      className="w-full flex items-center justify-between py-3 text-base font-bold uppercase tracking-widest"
+      style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}
     >
       {title}
       <motion.div
@@ -174,7 +175,7 @@ export default function AddProperty() {
 
   const Input = ({ label, name, type = "text", required, placeholder, ...rest }) => (
     <div>
-      <label className="text-sm text-text-muted block mb-1.5">
+      <label className="block text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--color-navy)" }}>
         {label} {required && <span className="text-risk-red">*</span>}
       </label>
       <input
@@ -192,7 +193,7 @@ export default function AddProperty() {
 
   const Select = ({ label, name, options, placeholder }) => (
     <div>
-      <label className="text-sm text-text-muted block mb-1.5">{label}</label>
+      <label className="block text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "var(--color-navy)" }}>{label}</label>
       <select
         value={form[name]}
         onChange={set(name)}
@@ -214,7 +215,8 @@ export default function AddProperty() {
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={() => navigate("/vault")}
-        className="flex items-center gap-2 text-text-muted hover:text-text-primary mb-6 transition-colors"
+        className="flex items-center gap-2 mb-6 transition-colors text-xs font-bold uppercase tracking-widest"
+        style={{ color: "var(--color-teal)" }}
       >
         <ArrowLeft className="w-4 h-4" /> {t("vault.back_to_vault") || "Back to Vault"}
       </motion.button>
@@ -222,7 +224,8 @@ export default function AddProperty() {
       <motion.h1
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-3xl font-bold text-text-primary mb-4"
+        className="text-3xl font-bold mb-4"
+        style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}
       >
         {t("vault.add_property") || "Add Property"}
       </motion.h1>
@@ -243,7 +246,8 @@ export default function AddProperty() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-bg-card rounded-2xl border border-border p-6"
+          className="bg-bg-card border p-6"
+          style={{ borderColor: "var(--color-border)" }}
           style={{ boxShadow: "var(--shadow-card)" }}
         >
           <SectionHeader title={t("vault.basic_info") || "Basic Information"} sectionKey="basic" />
@@ -322,7 +326,8 @@ export default function AddProperty() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08 }}
-          className="bg-bg-card rounded-2xl border border-border p-6"
+          className="bg-bg-card border p-6"
+          style={{ borderColor: "var(--color-border)" }}
           style={{ boxShadow: "var(--shadow-card)" }}
         >
           <SectionHeader title={t("vault.purchase_details") || "Purchase Details"} sectionKey="purchase" />
@@ -363,7 +368,8 @@ export default function AddProperty() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.16 }}
-          className="bg-bg-card rounded-2xl border border-border p-6"
+          className="bg-bg-card border p-6"
+          style={{ borderColor: "var(--color-border)" }}
           style={{ boxShadow: "var(--shadow-card)" }}
         >
           <SectionHeader title={t("vault.documents") || "Documents"} sectionKey="documents" />
@@ -406,7 +412,8 @@ export default function AddProperty() {
           type="submit"
           disabled={submitting}
           whileTap={{ scale: 0.98 }}
-          className="w-full py-4 bg-gold hover:bg-gold-hover text-white rounded-2xl text-lg font-semibold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+          className="w-full py-4 text-sm font-bold uppercase tracking-widest transition-all disabled:opacity-50 flex items-center justify-center gap-2 hover:opacity-90"
+          style={{ backgroundColor: "var(--color-gold)", color: "var(--color-navy)" }}
           style={{ boxShadow: "var(--shadow-gold)" }}
         >
           {submitting ? (

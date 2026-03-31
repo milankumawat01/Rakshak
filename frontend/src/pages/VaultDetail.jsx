@@ -101,7 +101,8 @@ export default function VaultDetail() {
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => navigate("/vault")}
-          className="flex items-center gap-2 text-gold hover:text-gold-hover mb-6 transition-colors text-sm"
+          className="flex items-center gap-2 mb-6 transition-colors text-xs font-bold uppercase tracking-widest"
+          style={{ color: "var(--color-teal)" }}
         >
           <ArrowLeft className="w-4 h-4" /> {t("vault.back_to_vault") || "Back to Vault"}
         </motion.button>
@@ -115,7 +116,7 @@ export default function VaultDetail() {
         >
           <div className="flex items-start justify-between mb-2">
             <div>
-              <h1 className="text-3xl font-bold text-text-primary">{name}</h1>
+              <h1 className="text-3xl font-bold" style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}>{name}</h1>
               {location && (
                 <p className="text-sm text-text-muted mt-1">{location}</p>
               )}
@@ -185,8 +186,8 @@ export default function VaultDetail() {
                 className={`bg-bg-card rounded-xl p-4 border border-border text-center ${box.border || ""} ${box.bgClass || ""}`}
                 style={{ boxShadow: box.shadow || "var(--shadow-stat)" }}
               >
-                <p className="text-xs text-text-muted mb-1">{box.label}</p>
-                <p className={`text-xl font-bold font-mono ${box.valueClass}`}>
+                <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: "var(--color-text-muted)" }}>{box.label}</p>
+                <p className={`text-xl font-bold ${box.valueClass}`} style={{ fontFamily: "var(--font-serif)" }}>
                   {box.value}
                 </p>
               </motion.div>
@@ -195,22 +196,19 @@ export default function VaultDetail() {
         </motion.div>
 
         {/* Tab Navigation */}
-        <div className="flex gap-1 mb-6 bg-bg-input rounded-xl p-1 overflow-x-auto">
+        <div className="flex gap-0 mb-6 border-b overflow-x-auto" style={{ borderColor: "var(--color-border)" }}>
           {TABS.map(({ key, labelKey, Icon }) => (
             <button
               key={key}
               onClick={() => setActiveTab(key)}
-              className={`relative flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-                activeTab === key
-                  ? "text-white"
-                  : "text-text-muted hover:text-text-primary"
-              }`}
+              className="relative flex items-center gap-1.5 px-5 py-3 text-xs font-bold uppercase tracking-widest whitespace-nowrap transition-colors"
+              style={{ color: activeTab === key ? "var(--color-gold)" : "var(--color-text-muted)" }}
             >
               {activeTab === key && (
                 <motion.div
                   layoutId="vault-tab"
-                  className="absolute inset-0 bg-gold rounded-lg"
-                  style={{ boxShadow: "var(--shadow-gold)" }}
+                  className="absolute bottom-0 left-0 right-0 h-0.5"
+                  style={{ backgroundColor: "var(--color-gold)" }}
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}

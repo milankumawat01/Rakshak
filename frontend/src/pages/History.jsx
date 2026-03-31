@@ -55,7 +55,7 @@ export default function History() {
   return (
     <AppLayout>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-text-primary">{t("dashboard.recent_activity")}</h1>
+        <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}>{t("dashboard.recent_activity")}</h1>
         <button
           onClick={refetch}
           className="p-2 text-text-muted hover:text-text-primary border border-border rounded-lg transition-colors hover:border-gold/40"
@@ -72,7 +72,10 @@ export default function History() {
           placeholder="Search by village, plot, or seller name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-bg-card border border-border rounded-xl pl-10 pr-4 py-3 text-sm focus:border-accent focus:outline-none text-text-primary"
+          className="w-full border pl-10 pr-4 py-3 text-sm focus:outline-none transition-colors"
+          style={{ backgroundColor: "var(--color-bg-card)", borderColor: "var(--color-border)", color: "var(--color-text-primary)" }}
+          onFocus={(e) => e.target.style.borderColor = "var(--color-gold)"}
+          onBlur={(e) => e.target.style.borderColor = "var(--color-border)"}
         />
       </div>
 
@@ -82,7 +85,8 @@ export default function History() {
           <p>{t("dashboard.no_submissions") || "No submissions yet."}</p>
           <button
             onClick={() => navigate("/verify")}
-            className="mt-4 px-4 py-2 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-medium transition-all active:scale-95"
+            className="mt-4 px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all active:scale-95 hover:opacity-90"
+            style={{ backgroundColor: "var(--color-gold)", color: "var(--color-navy)" }}
           >
             {t("common.new_verification")}
           </button>
@@ -95,7 +99,8 @@ export default function History() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="flex items-center justify-between bg-bg-card rounded-xl px-5 py-4 border border-border border-l-4 border-l-accent/40 hover:border-l-accent cursor-pointer transition-all hover:-translate-y-0.5"
+              className="flex items-center justify-between bg-bg-card px-5 py-4 border border-l-4 cursor-pointer transition-all hover:-translate-y-0.5"
+              style={{ borderColor: "var(--color-border)", borderLeftColor: "var(--color-gold)" }}
               style={{ boxShadow: "var(--shadow-card)" }}
               onClick={() => s.submission_status === "completed" && navigate(`/vault/${subToVault[s.submission_id] || s.submission_id}`)}
             >

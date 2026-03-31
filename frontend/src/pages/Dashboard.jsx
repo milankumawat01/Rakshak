@@ -98,7 +98,7 @@ export default function Dashboard() {
     <AppLayout>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-text-primary">{t("nav.dashboard")}</h1>
+        <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}>{t("nav.dashboard")}</h1>
         <div className="flex items-center gap-3">
           <button
             onClick={handleRefresh}
@@ -109,8 +109,8 @@ export default function Dashboard() {
           </button>
           <button
             onClick={() => navigate("/vault/add")}
-            className="hidden md:flex items-center gap-2 px-4 py-2 bg-gold hover:bg-gold-hover text-white rounded-lg text-sm font-medium transition-all active:scale-95"
-            style={{ boxShadow: "var(--shadow-gold)" }}
+            className="hidden md:flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all active:scale-95 hover:opacity-90"
+            style={{ backgroundColor: "var(--color-gold)", color: "var(--color-navy)", boxShadow: "var(--shadow-gold)" }}
           >
             <Plus className="w-4 h-4" /> {t("vault.add_property") || "Add Property"}
           </button>
@@ -162,10 +162,10 @@ export default function Dashboard() {
             style={{ boxShadow: card.shadow || "var(--shadow-stat)" }}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-text-muted">{card.label}</span>
+              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--color-text-muted)" }}>{card.label}</span>
               {card.icon}
             </div>
-            <p className={`text-2xl md:text-3xl font-bold font-mono ${card.valueClass}`}>
+            <p className={`text-2xl md:text-3xl font-bold font-mono ${card.valueClass}`} style={{ fontFamily: "var(--font-serif)" }}>
               {card.value}
             </p>
           </motion.div>
@@ -192,7 +192,7 @@ export default function Dashboard() {
       {/* Recent Vault Items (top 6) */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-text-primary">{t("dashboard.your_vault")}</h2>
+          <h2 className="text-lg font-bold" style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}>{t("dashboard.your_vault")}</h2>
           {vaultItems.length > 0 && (
             <button
               onClick={() => navigate("/vault")}
@@ -215,8 +215,8 @@ export default function Dashboard() {
             <p className="text-sm mt-1">{t("dashboard.no_vault_subtitle")}</p>
             <button
               onClick={() => navigate("/vault/add")}
-              className="mt-4 px-4 py-2 bg-gold hover:bg-gold-hover text-white rounded-lg text-sm font-medium transition-all active:scale-95"
-              style={{ boxShadow: "var(--shadow-gold)" }}
+              className="mt-4 px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all active:scale-95 hover:opacity-90"
+              style={{ backgroundColor: "var(--color-gold)", color: "var(--color-navy)", boxShadow: "var(--shadow-gold)" }}
             >
               {t("vault.add_property") || "Add Property"}
             </button>
@@ -234,7 +234,7 @@ export default function Dashboard() {
       {submissions.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-text-primary">{t("dashboard.recent_activity")}</h2>
+            <h2 className="text-lg font-bold" style={{ fontFamily: "var(--font-serif)", color: "var(--color-navy)" }}>{t("dashboard.recent_activity")}</h2>
             {submissions.length > 5 && (
               <button
                 onClick={() => navigate("/history")}

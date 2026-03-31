@@ -1,30 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-base: #FAF9F7;
+  --color-bg-base: #FAF9F6;
   --color-bg-card: #FFFFFF;
-  --color-bg-input: #F5F3F0;
-  --color-border: #E5E0DB;
-  --color-border-hover: #D4CFC9;
-  --color-accent: #D97706;
-  --color-accent-hover: #B45309;
-  --color-text-primary: #1A1A1A;
-  --color-text-muted: #666666;
+  --color-bg-input: #F5F5F0;
+  --color-border: #E2DDD6;
+  --color-border-hover: #CCC7BF;
+  --color-accent: #D4AF37;
+  --color-accent-hover: #C9A030;
+  --color-text-primary: #2B2B2B;
+  --color-text-muted: #5A5A5A;
   --color-risk-green: #10B981;
   --color-risk-yellow: #F59E0B;
   --color-risk-orange: #F97316;
   --color-risk-red: #EF4444;
-  --color-gold: #D4A843;
-  --color-gold-hover: #C4982F;
+  --color-gold: #D4AF37;
+  --color-gold-hover: #C9A030;
+  --color-gold-light: #E8C971;
+  --color-navy: #0A1F44;
+  --color-navy-deep: #08182E;
+  --color-teal: #1FA2A8;
   --color-profit-green: #10B981;
   --color-profit-red: #EF4444;
-  --font-sans: "Inter", sans-serif;
+  --font-sans: "Lato", sans-serif;
+  --font-serif: "Libre Baskerville", serif;
+  --font-display: "Cormorant Garamond", serif;
   --font-mono: "DM Mono", monospace;
 
   /* Shadow tokens */
   --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
   --shadow-card-hover: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
-  --shadow-gold: 0 4px 14px rgba(212,168,67,0.25);
+  --shadow-gold: 0 4px 14px rgba(212,175,55,0.3);
   --shadow-stat: 0 2px 8px rgba(0,0,0,0.05);
 }
 
@@ -42,7 +48,8 @@ button {
 }
 
 ::selection {
-  background-color: #D9770633;
+  background-color: #D4AF3740;
+  color: #0A1F44;
 }
 
 /* Scrollbar styling */
@@ -53,7 +60,7 @@ button {
   background: var(--color-bg-base);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--color-navy);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -62,7 +69,7 @@ button {
 
 /* Gradient utilities */
 .gradient-gold-subtle {
-  background: linear-gradient(135deg, rgba(212,168,67,0.06) 0%, rgba(212,168,67,0.02) 100%);
+  background: linear-gradient(135deg, rgba(212,175,55,0.06) 0%, rgba(212,175,55,0.02) 100%);
 }
 .gradient-profit-green {
   background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, transparent 100%);
@@ -84,7 +91,17 @@ button {
 /* Focus ring utility */
 .focus-gold:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--color-bg-base), 0 0 0 4px rgba(212,168,67,0.4);
+  box-shadow: 0 0 0 2px var(--color-bg-base), 0 0 0 4px rgba(212,175,55,0.4);
+}
+
+/* Utility classes for navy theme */
+.font-serif { font-family: var(--font-serif); }
+.font-display { font-family: var(--font-display); }
+
+/* Dot pattern overlay */
+.dot-pattern {
+  background-image: radial-gradient(rgba(212,175,55,0.15) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 /* Print styles for PDF download */
