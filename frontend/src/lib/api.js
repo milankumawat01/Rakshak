@@ -39,9 +39,7 @@ export const refreshToken = () => api.post("/auth/refresh");
 
 // --- Submissions ---
 export const uploadSubmission = (formData) =>
-  api.post("/submissions/upload", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  api.post("/submissions/upload", formData);
 export const getSubmission = (id) => api.get(`/submissions/${id}`);
 export const updateExtraction = (id, data) => api.patch(`/submissions/${id}/extraction`, data);
 export const listSubmissions = (q) => api.get("/submissions/", { params: q ? { q } : {} });
@@ -56,9 +54,7 @@ export const deleteVaultItem = (id) => api.delete(`/vault/${id}`);
 export const getVaultSummary = () => api.get("/vault/summary");
 export const getVaultValuation = (id) => api.get(`/vault/${id}/valuation`);
 export const uploadVaultDocument = (vaultId, formData) =>
-  api.post(`/vault/${vaultId}/documents`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  api.post(`/vault/${vaultId}/documents`, formData);
 export const deleteVaultDocument = (vaultId, docId) =>
   api.delete(`/vault/${vaultId}/documents/${docId}`);
 export const shareVaultItem = (id, data) => api.post(`/vault/${id}/share`, data);

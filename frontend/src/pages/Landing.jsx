@@ -1,10 +1,15 @@
 import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 import {
   Shield, Upload, Database, ScanSearch, ClipboardCheck, BarChart3,
-  FileCheck, ArrowRight, Monitor, CheckCircle
+  FileCheck, ArrowRight, Monitor, CheckCircle, FileText
 } from "lucide-react";
+import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import { useAuth } from "../lib/auth";
 import { useT } from "../lib/i18n";
+import { usePendingFile } from "../lib/pendingFile";
 import RiskScoreGauge from "../components/RiskScoreGauge";
 
 export default function Landing() {
@@ -12,10 +17,30 @@ export default function Landing() {
   const { isLoggedIn } = useAuth();
   const { t, locale, setLocale } = useT();
 
+  const { setPendingFile } = usePendingFile();
+
   const handleCTA = () => {
     if (isLoggedIn) navigate("/verify");
     else navigate("/signup");
   };
+
+  const onHeroDrop = useCallback((accepted) => {
+    if (accepted.length === 0) return;
+    const file = accepted[0];
+    setPendingFile(file);
+    if (isLoggedIn) {
+      navigate("/verify");
+    } else {
+      navigate("/login?next=/verify");
+    }
+  }, [isLoggedIn, navigate, setPendingFile]);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: onHeroDrop,
+    accept: { "image/*": [".jpg", ".jpeg", ".png"], "application/pdf": [".pdf"] },
+    maxFiles: 1,
+    noClick: false,
+  });
 
   const pipelineSteps = [
     { Icon: Upload, titleKey: "landing.step1_title", descKey: "landing.step1_desc" },
@@ -37,6 +62,14 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "var(--color-bg-base)" }}>
+      <Helmet>
+        <title>BhumiRakshak — Land Verification Jharkhand | AI-Powered Khatiyan Check</title>
+        <meta name="description" content="Verify land ownership in Jharkhand before you buy. AI-powered Khatiyan document analysis, CNT Act compliance, forest boundary check, and risk scoring in minutes." />
+        <meta property="og:title" content="BhumiRakshak — Land Verification Jharkhand" />
+        <meta property="og:description" content="AI-powered Khatiyan verification with 8-factor risk scoring. Protect your investment from tribal land violations, fraud, and CNT Act non-compliance." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://bhumirakshak.in/" />
+      </Helmet>
 
       {/* Sticky Nav */}
       <nav className="sticky top-0 z-40 backdrop-blur-md border-b border-white/10" style={{ backgroundColor: "rgba(8,24,46,0.97)" }}>
@@ -131,22 +164,36 @@ export default function Landing() {
               {t("landing.hero_subtitle")}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mt-2">
-              <button
-                onClick={handleCTA}
-                className="inline-flex items-center justify-center h-14 px-8 text-sm font-bold uppercase tracking-widest transition-all hover:-translate-y-0.5 shadow-lg gap-2"
-                style={{ backgroundColor: "var(--color-gold)", color: "var(--color-navy)" }}
-              >
-                {t("common.verify_now")}
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <a
-                href="#how-it-works"
-                className="inline-flex items-center justify-center h-14 px-8 text-sm font-bold uppercase tracking-widest border border-white/30 text-white hover:bg-white/10 transition-colors"
-              >
-                {t("landing.how_it_works")}
-              </a>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="flex flex-col gap-3 mt-2"
+            >
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={handleCTA}
+                  className="inline-flex items-center justify-center h-16 px-10 text-base font-bold uppercase tracking-widest transition-all hover:-translate-y-1 gap-2"
+                  style={{
+                    backgroundColor: "var(--color-gold)",
+                    color: "var(--color-navy)",
+                    boxShadow: "0 8px 32px rgba(212,175,55,0.35), 0 2px 8px rgba(212,175,55,0.2)",
+                  }}
+                >
+                  {t("common.verify_now")}
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+                <a
+                  href="#how-it-works"
+                  className="inline-flex items-center justify-center h-16 px-8 text-sm font-bold uppercase tracking-widest border border-white/30 text-white hover:bg-white/10 transition-colors"
+                >
+                  {t("landing.how_it_works")}
+                </a>
+              </div>
+              <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.4)" }}>
+                Free · No setup needed · Report in 2 minutes
+              </p>
+            </motion.div>
 
             {/* Trust bar */}
             <div className="flex flex-col sm:flex-row gap-5 sm:gap-8 text-sm mt-2">
@@ -158,6 +205,60 @@ export default function Landing() {
               ))}
             </div>
           </div>
+          {/* Hero Upload Zone */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="hidden lg:flex lg:col-span-4 flex-col justify-center"
+          >
+            <div
+              {...getRootProps()}
+              className="relative flex flex-col items-center justify-center gap-4 p-8 border-2 border-dashed cursor-pointer transition-all"
+              style={{
+                borderColor: isDragActive ? "var(--color-gold)" : "rgba(255,255,255,0.25)",
+                backgroundColor: isDragActive ? "rgba(212,175,55,0.08)" : "rgba(8,24,46,0.5)",
+                backdropFilter: "blur(8px)",
+                minHeight: "260px",
+              }}
+            >
+              <input {...getInputProps()} />
+
+              <div
+                className="w-16 h-16 flex items-center justify-center border transition-colors"
+                style={{
+                  borderColor: isDragActive ? "var(--color-gold)" : "rgba(255,255,255,0.2)",
+                  backgroundColor: isDragActive ? "rgba(212,175,55,0.15)" : "rgba(255,255,255,0.05)",
+                }}
+              >
+                {isDragActive
+                  ? <FileText className="w-7 h-7" style={{ color: "var(--color-gold)" }} />
+                  : <Upload className="w-7 h-7" style={{ color: "rgba(255,255,255,0.5)" }} />
+                }
+              </div>
+
+              <div className="text-center">
+                <p className="font-bold text-sm text-white mb-1">
+                  {isDragActive ? "Drop to verify" : "Drop your Khatiyan here"}
+                </p>
+                <p className="text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>
+                  PDF, JPG, or PNG supported
+                </p>
+              </div>
+
+              <div className="w-full border-t border-white/10 pt-4 text-center">
+                <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--color-gold)" }}>
+                  or click to browse
+                </p>
+              </div>
+
+              {!isLoggedIn && (
+                <p className="text-xs text-center" style={{ color: "rgba(255,255,255,0.35)" }}>
+                  You'll be asked to log in first
+                </p>
+              )}
+            </div>
+          </motion.div>
         </div>
 
         {/* Stats bar */}

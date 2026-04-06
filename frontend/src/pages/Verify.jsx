@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { uploadSubmission, createVaultItem, updateExtraction } from "../lib/api";
 import { useT } from "../lib/i18n";
+import { usePendingFile } from "../lib/pendingFile";
 import ProcessingScreen from "../components/ProcessingScreen";
 import OCRResultTable from "../components/OCRResultTable";
 import RiskScoreGauge from "../components/RiskScoreGauge";
@@ -29,6 +30,7 @@ const STEP_REPORT = 5;
 export default function Verify() {
   const navigate = useNavigate();
   const { t } = useT();
+  const { pendingFile, clearPendingFile } = usePendingFile();
   const [step, setStep] = useState(STEP_UPLOAD);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -47,6 +49,15 @@ export default function Verify() {
   const printRef = useRef(null);
 
   const stepLabels = t("verify.steps");
+
+  // Auto-populate file dropped on the landing page hero
+  useEffect(() => {
+    if (pendingFile) {
+      setFile(pendingFile);
+      setPreview(URL.createObjectURL(pendingFile));
+      clearPendingFile();
+    }
+  }, []);
 
   // Upload handler
   const onDrop = useCallback((accepted) => {

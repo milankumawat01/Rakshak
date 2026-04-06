@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { Shield, Mail, ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
 import { loginRequest, verifyLogin } from "../lib/api";
@@ -7,6 +7,7 @@ import { useAuth } from "../lib/auth";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { login } = useAuth();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,7 @@ export default function Login() {
       const { data } = await verifyLogin(email, otp);
       login(data.access_token, data.user_id, data.name, data.email);
       toast.success("Welcome back!");
-      navigate("/dashboard");
+      navigate(searchParams.get("next") || "/dashboard");
     } catch (err) {
       toast.error(err.response?.data?.detail || "Invalid OTP");
     }

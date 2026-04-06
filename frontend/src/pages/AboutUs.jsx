@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Shield, ArrowLeft, Briefcase, Bitcoin, Plane, GraduationCap, Award, Server } from "lucide-react";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import { useT } from "../lib/i18n";
 
 const fadeUp = {
@@ -18,6 +19,10 @@ export default function AboutUs() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "var(--color-bg-base)" }}>
+      <Helmet>
+        <title>About Us — BhumiRakshak Land Verification</title>
+        <meta name="description" content="Meet the team behind BhumiRakshak — Jharkhand's AI-powered land verification platform built to protect buyers from fraud and CNT Act violations." />
+      </Helmet>
 
       {/* Nav */}
       <nav className="sticky top-0 z-40 backdrop-blur-md border-b border-white/10" style={{ backgroundColor: "rgba(8,24,46,0.97)" }}>
