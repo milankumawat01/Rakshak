@@ -6,15 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "react-snap",
     "preview": "vite preview"
-  },
-  "reactSnap": {
-    "source": "dist",
-    "destinationDir": "dist",
-    "routes": ["/", "/about"],
-    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"],
-    "inlineCss": false
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.1",
@@ -33,7 +25,5 @@
     "tailwindcss": "^4.2.1",
     "vite": "^8.0.0"
   },
-  "devDependencies": {
-    "react-snap": "^1.23.0"
-  }
+  "devDependencies": {}
 }
