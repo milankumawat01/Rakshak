@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /report/
+
+# Block authenticated/app routes
+Disallow: /dashboard
+Disallow: /verify
+Disallow: /profile
+Disallow: /vault
+Disallow: /history
+Disallow: /login
+Disallow: /signup
+Disallow: /payment
+
+Sitemap: https://bhumirakshak.com/sitemap.xml

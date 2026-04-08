@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Shield, AlertTriangle, CheckCircle, XCircle, MapPin, FileText } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import { getPublicReport } from "../lib/api";
 
 const RISK_COLORS = {
@@ -54,8 +55,47 @@ export default function PublicReport() {
   const { extraction, assessment } = report;
   const riskStyle = RISK_COLORS[report.risk_level] || RISK_COLORS.YELLOW;
 
+  const riskLabel = { GREEN: "Low Risk", YELLOW: "Moderate Risk", ORANGE: "High Risk", RED: "Critical Risk" }[report.risk_level] || "Risk Unknown";
+  const reportTitle = `${report.village_name || "Land"} Plot ${report.plot_number || ""} — ${riskLabel} | BhumiRakshak`;
+  const reportDesc = `Land verification report for ${report.village_name || "property"} (Plot ${report.plot_number || "—"}). Risk score: ${report.risk_score ?? "—"}/100 — ${riskLabel}. CNT Act compliance and full AI analysis by BhumiRakshak.`;
+  const reportUrl = `https://bhumirakshak.com/report/${report.id || ""}`;
+
   return (
     <div className="min-h-screen bg-bg-base">
+      <Helmet>
+        <title>{reportTitle}</title>
+        <meta name="description" content={reportDesc} />
+        <meta name="robots" content="noindex, follow" />
+
+        {/* Open Graph — for WhatsApp/social sharing */}
+        <meta property="og:title" content={reportTitle} />
+        <meta property="og:description" content={reportDesc} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={reportUrl} />
+        <meta property="og:image" content="https://bhumirakshak.com/og-image.jpg" />
+        <meta property="og:site_name" content="BhumiRakshak" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={reportTitle} />
+        <meta name="twitter:description" content={reportDesc} />
+
+        {/* JSON-LD: Report */}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Report",
+          "name": reportTitle,
+          "description": reportDesc,
+          "url": reportUrl,
+          "dateCreated": report.created_at,
+          "publisher": {
+            "@type": "Organization",
+            "name": "BhumiRakshak",
+            "url": "https://bhumirakshak.com"
+          }
+        })}</script>
+      </Helmet>
+
       {/* Header */}
       <header className="border-b border-white/10 px-6 py-5" style={{ backgroundColor: "var(--color-navy-deep)" }}>
         <div className="max-w-4xl mx-auto flex items-center justify-between">

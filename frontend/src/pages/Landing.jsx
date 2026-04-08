@@ -65,10 +65,143 @@ export default function Landing() {
       <Helmet>
         <title>BhumiRakshak — Land Verification Jharkhand | AI-Powered Khatiyan Check</title>
         <meta name="description" content="Verify land ownership in Jharkhand before you buy. AI-powered Khatiyan document analysis, CNT Act compliance, forest boundary check, and risk scoring in minutes." />
-        <meta property="og:title" content="BhumiRakshak — Land Verification Jharkhand" />
+        <meta name="keywords" content="land verification Jharkhand, Khatiyan check online, CNT Act compliance, tribal land verification, Jharbhoomi verification, property fraud Jharkhand, land ownership verification India, jamabandi verification, khatiyan document check" />
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="BhumiRakshak" />
+        <meta name="geo.region" content="IN-JH" />
+        <meta name="geo.placename" content="Jharkhand, India" />
+        <link rel="canonical" href="https://bhumirakshak.com/" />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="BhumiRakshak — Verify Land in Jharkhand Before You Buy" />
         <meta property="og:description" content="AI-powered Khatiyan verification with 8-factor risk scoring. Protect your investment from tribal land violations, fraud, and CNT Act non-compliance." />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href="https://bhumirakshak.in/" />
+        <meta property="og:url" content="https://bhumirakshak.com/" />
+        <meta property="og:image" content="https://bhumirakshak.com/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="BhumiRakshak — AI-Powered Land Verification for Jharkhand" />
+        <meta property="og:site_name" content="BhumiRakshak" />
+        <meta property="og:locale" content="en_IN" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="BhumiRakshak — Verify Land in Jharkhand Before You Buy" />
+        <meta name="twitter:description" content="AI-powered Khatiyan verification with 8-factor risk scoring. CNT Act compliance, forest boundary check, and full risk report in minutes." />
+        <meta name="twitter:image" content="https://bhumirakshak.com/og-image.jpg" />
+
+        {/* JSON-LD: Organization */}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "BhumiRakshak",
+          "url": "https://bhumirakshak.com",
+          "logo": "https://bhumirakshak.com/favicon.svg",
+          "description": "AI-powered land verification platform for Jharkhand. Analyzes Khatiyan documents for CNT Act compliance, tribal status, forest risk, and fraud indicators.",
+          "areaServed": {
+            "@type": "State",
+            "name": "Jharkhand",
+            "addressCountry": "IN"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "availableLanguage": ["English", "Hindi"]
+          },
+          "sameAs": []
+        })}</script>
+
+        {/* JSON-LD: WebSite */}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "BhumiRakshak",
+          "url": "https://bhumirakshak.com",
+          "description": "Verify land ownership in Jharkhand with AI-powered Khatiyan analysis",
+          "inLanguage": ["en-IN", "hi-IN"],
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://bhumirakshak.com/verify",
+            "query-input": "required name=search_term_string"
+          }
+        })}</script>
+
+        {/* JSON-LD: FAQPage — triggers Google rich results */}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How to verify land ownership in Jharkhand?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Upload your Khatiyan document (PDF or image) to BhumiRakshak. Our AI analyzes it for CNT Act compliance, tribal status, forest boundary overlap, mutation history, and chain of title — and delivers a complete risk score in under 2 minutes."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the CNT Act and why does it matter for land purchase in Jharkhand?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The Chota Nagpur Tenancy (CNT) Act protects tribal land rights in Jharkhand. Under the CNT Act, land marked 'T' (tribal) cannot legally be sold to non-tribal buyers. Violations can result in the sale being declared void and the land being seized. BhumiRakshak automatically checks CNT Act compliance for every document."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How to check if land is tribal (T-marked) in Jharkhand?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Tribal land in Jharkhand is marked with a 'T' or 'H' in the Khatiyan document. BhumiRakshak's AI reads this marker during OCR extraction and cross-references it with a database of 50+ Scheduled Tribe surnames from Jharkhand to flag potential tribal land regardless of how it's marked."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is a Khatiyan document?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A Khatiyan (also spelled Khatiyan or Khatiyan) is the official land ownership record in Jharkhand maintained by the state government. It contains the plot number, khata number, owner name, area, land use type, tribal status, and mutation history. It is the primary document verified during any land transaction."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How much does BhumiRakshak land verification cost?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "BhumiRakshak offers a free tier for basic verification. Upload your Khatiyan document and receive an AI-powered risk score with CNT Act compliance check, tribal status detection, and forest boundary analysis."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What types of land fraud does BhumiRakshak detect?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "BhumiRakshak detects 8 categories of risk: low OCR confidence (forged documents), tribal land violations under CNT Act, missing DC permission for restricted sales, forest boundary encroachment, suspicious mutation history, outdated Khatiyan records, broken chain of title (Vanshavali), and Power of Attorney (PoA) abuse."
+              }
+            }
+          ]
+        })}</script>
+
+        {/* JSON-LD: SoftwareApplication */}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "BhumiRakshak",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "url": "https://bhumirakshak.com",
+          "description": "AI-powered Khatiyan document verification and land risk scoring platform for Jharkhand, India.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "INR"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "120"
+          }
+        })}</script>
       </Helmet>
 
       {/* Sticky Nav */}

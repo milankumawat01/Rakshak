@@ -20,8 +20,55 @@ export default function AboutUs() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: "var(--color-bg-base)" }}>
       <Helmet>
-        <title>About Us — BhumiRakshak Land Verification</title>
+        <title>About Us — BhumiRakshak | Land Verification Jharkhand</title>
         <meta name="description" content="Meet the team behind BhumiRakshak — Jharkhand's AI-powered land verification platform built to protect buyers from fraud and CNT Act violations." />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://bhumirakshak.com/about" />
+
+        {/* Open Graph */}
+        <meta property="og:title" content="About BhumiRakshak — The Team Behind Jharkhand's Land Verification Platform" />
+        <meta property="og:description" content="Meet the team behind BhumiRakshak — Jharkhand's AI-powered land verification platform built to protect buyers from fraud and CNT Act violations." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://bhumirakshak.com/about" />
+        <meta property="og:image" content="https://bhumirakshak.com/og-image.jpg" />
+        <meta property="og:site_name" content="BhumiRakshak" />
+        <meta property="og:locale" content="en_IN" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="About BhumiRakshak — Jharkhand's Land Verification Platform" />
+        <meta name="twitter:description" content="Meet the founders building AI-powered land verification for Jharkhand to protect buyers from fraud and CNT Act violations." />
+        <meta name="twitter:image" content="https://bhumirakshak.com/og-image.jpg" />
+
+        {/* JSON-LD: People */}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          "url": "https://bhumirakshak.com/about",
+          "name": "About BhumiRakshak",
+          "description": "Meet the team behind BhumiRakshak, Jharkhand's AI-powered land verification platform.",
+          "mainEntity": {
+            "@type": "Organization",
+            "name": "BhumiRakshak",
+            "url": "https://bhumirakshak.com",
+            "member": [
+              {
+                "@type": "Person",
+                "name": "Sanjeev Kumar",
+                "jobTitle": "Co-Founder & CEO",
+                "alumniOf": [
+                  { "@type": "CollegeOrUniversity", "name": "Stanford University" },
+                  { "@type": "CollegeOrUniversity", "name": "IIT Delhi" }
+                ]
+              },
+              {
+                "@type": "Person",
+                "name": "Ayush Katiyal",
+                "jobTitle": "Co-Founder"
+              }
+            ]
+          }
+        })}</script>
       </Helmet>
 
       {/* Nav */}
